@@ -87,9 +87,9 @@
 
 	var _triangles2 = _interopRequireDefault(_triangles);
 
-	var _whiteTriangles = __webpack_require__(156);
+	var _greenScene = __webpack_require__(157);
 
-	var _whiteTriangles2 = _interopRequireDefault(_whiteTriangles);
+	var _greenScene2 = _interopRequireDefault(_greenScene);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -112,6 +112,7 @@
 	  Demo.prototype._render = function _render() {
 	    this.mainTimeline = new mojs.Timeline();
 	    this.mainTimeline.add(new _triangles2.default());
+	    this.mainTimeline.append(new _greenScene2.default());
 
 	    this.player = new _mojsPlayer2.default({
 	      add: this.mainTimeline
@@ -9496,12 +9497,14 @@
 	    var tr1 = new mojs.Transit({
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
-	      duration: 800,
-	      radius: 65,
+	      duration: 2000,
+	      radius: { 60: 65 },
 	      angle: -60,
 	      fill: 'none',
 	      stroke: 'white',
-	      strokeWidth: { 25: 5 }
+	      strokeWidth: { 30: 5 },
+	      easing: 'cubic.out',
+	      isShowEnd: false
 	    });
 
 	    var shift1 = 87,
@@ -9515,7 +9518,8 @@
 	      fill: 'none',
 	      stroke: 'white',
 	      strokeWidth: { 14: 4 },
-	      easing: 'expo.out'
+	      easing: 'expo.out',
+	      isShowEnd: false
 	    };
 
 	    opts.x = { 0: -shift1 };
@@ -9540,7 +9544,8 @@
 	      stroke: 'white',
 	      strokeWidth: { 7: 0 },
 	      easing: 'cubic.out',
-	      delay: 100
+	      delay: 100,
+	      isShowEnd: false
 	    });
 
 	    var tr3_1 = new mojs.Transit({
@@ -9552,7 +9557,8 @@
 	      fill: 'none',
 	      stroke: 'white',
 	      strokeWidth: { 4: 0 },
-	      easing: 'cubic.out'
+	      easing: 'cubic.out',
+	      isShowEnd: false
 	    });
 
 	    this.timeline.add(tr1, tr2_1, tr2_2, tr2_3, tr3, tr3_1);
@@ -9562,6 +9568,164 @@
 	}(_module2.default);
 
 	exports.default = WhiteTriangles;
+
+/***/ },
+/* 157 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(77);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GreenScene = function (_Module) {
+	  (0, _inherits3.default)(GreenScene, _Module);
+
+	  function GreenScene(o) {
+	    var _ret;
+
+	    (0, _classCallCheck3.default)(this, GreenScene);
+
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
+
+	    return _ret = _this.timeline, (0, _possibleConstructorReturn3.default)(_this, _ret);
+	  }
+	  /*
+	    Method for initial module's render.
+	    @private
+	  */
+
+
+	  GreenScene.prototype._render = function _render() {
+	    _Module.prototype._render.call(this);
+	    var greenBg = document.querySelector('#js-green-bg');
+	    this.timeline = new mojs.Timeline({
+	      onStart: function onStart() {
+	        console.log('start', this._props.name);
+	        greenBg.style.opacity = 1;
+	      },
+	      onComplete: function onComplete() {
+	        greenBg.style.opacity = 0;
+	        console.log('comple', this._props.name);
+	      }
+	    });
+
+	    var pinkSquare = new mojs.Transit({
+	      left: '50%', top: '50%',
+	      shape: 'rect',
+	      stroke: 'hotpink',
+	      strokeWidth: 50,
+	      angle: { '-240': 0 },
+	      radius: 25,
+	      scale: { 0: 2 },
+	      duration: 1200,
+	      fill: 'none',
+	      easing: 'expo.out'
+	    });
+	    // .then({ strokeWidth: 5, radius: 50 });
+
+	    this.timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare));
+	  };
+
+	  GreenScene.prototype._addTrail1 = function _addTrail1(pinkSquare) {
+	    var tm = new mojs.Timeline();
+	    var trailOpts = {
+	      left: '40%', top: '23%',
+	      shape: 'circle',
+	      stroke: 'white',
+	      strokeWidth: { 5: 0 },
+	      fill: 'none',
+	      radius: 25,
+	      radiusX: 20,
+	      angle: -90,
+	      strokeDasharray: '20% 300%',
+	      strokeDashoffset: { '-75%': '-100%' },
+	      duration: 550,
+	      delay: 200,
+	      parent: pinkSquare.el
+	    };
+
+	    var trail1 = new mojs.Transit(trailOpts);
+
+	    trailOpts.angle = -150;
+	    trailOpts.top = '14%';
+	    trailOpts.left = '32%';
+	    trailOpts.radius = 15;
+	    trailOpts.radiusX = 10;
+	    var trail2 = new mojs.Transit(trailOpts);
+
+	    // trailOpts.stroke = 'red';
+	    trailOpts.angle = -120;
+	    trailOpts.top = '17%';
+	    trailOpts.left = '32%';
+	    trailOpts.radius = 10;
+	    trailOpts.radiusX = 7;
+	    var trail3 = new mojs.Transit(trailOpts);
+
+	    return tm.add(trail1, trail2, trail3);
+	  };
+
+	  GreenScene.prototype._addTrail2 = function _addTrail2(pinkSquare) {
+	    var tm = new mojs.Timeline();
+	    var trailOpts = {
+	      left: '78%', top: '40%',
+	      shape: 'circle',
+	      stroke: 'white',
+	      strokeWidth: { 5: 0 },
+	      fill: 'none',
+	      radius: 22,
+	      radiusX: 20,
+	      angle: 0,
+	      strokeDasharray: '20% 300%',
+	      strokeDashoffset: { '-75%': '-100%' },
+	      duration: 550,
+	      delay: 200,
+	      parent: pinkSquare.el
+	    };
+
+	    var trail1 = new mojs.Transit(trailOpts);
+
+	    trailOpts.angle = -60;
+	    // trailOpts.stroke = 'red';
+	    trailOpts.top = '32%';
+	    trailOpts.left = '85%';
+	    trailOpts.radius = 12;
+	    trailOpts.radiusX = 10;
+	    var trail2 = new mojs.Transit(trailOpts);
+
+	    // trailOpts.stroke = 'red';
+	    trailOpts.angle = -0;
+	    // trailOpts.stroke = 'yellow';
+	    trailOpts.top = '37%';
+	    trailOpts.left = '78%';
+	    trailOpts.radius = 10;
+	    trailOpts.radiusX = 8;
+	    var trail3 = new mojs.Transit(trailOpts);
+
+	    return tm.add(trail1, trail2, trail3);
+	  };
+
+	  return GreenScene;
+	}(_module2.default);
+
+	exports.default = GreenScene;
 
 /***/ }
 /******/ ]);

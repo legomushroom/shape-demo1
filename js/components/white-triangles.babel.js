@@ -27,12 +27,14 @@ class WhiteTriangles extends Module {
     let tr1 = new mojs.Transit({
       left: '50%', top: '50%',
       shape:    'polygon',
-      duration: 800,
-      radius:   65,
+      duration: 2000,
+      radius:   { 60: 65 },
       angle:    -60,
       fill:   'none',
       stroke: 'white',
-      strokeWidth: {25:5},
+      strokeWidth: {30:5},
+      easing: 'cubic.out',
+      isShowEnd: false
     });
 
     let shift1 = 87,
@@ -47,6 +49,7 @@ class WhiteTriangles extends Module {
           stroke: 'white',
           strokeWidth: { 14 : 4 },
           easing: 'expo.out',
+          isShowEnd: false
         };
 
     opts.x = { 0: -shift1 };
@@ -71,7 +74,8 @@ class WhiteTriangles extends Module {
       stroke: 'white',
       strokeWidth: { 7 : 0 },
       easing: 'cubic.out',
-      delay: 100
+      delay: 100,
+      isShowEnd: false
     });
 
     let tr3_1 = new mojs.Transit({
@@ -84,6 +88,7 @@ class WhiteTriangles extends Module {
       stroke: 'white',
       strokeWidth: { 4 : 0 },
       easing: 'cubic.out',
+      isShowEnd: false
     });
     
     this.timeline.add( tr1, tr2_1, tr2_2, tr2_3, tr3, tr3_1 );

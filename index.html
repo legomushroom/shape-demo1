@@ -21,19 +21,27 @@
         background: cyan;
       }
       
-      .black-background {
-        background: #000;
-        width: 100%;
-        height: 100%;
+      .background {
+        width:    100%;
+        height:   100%;
         position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
+        left:     0;
+        top:      0;
+        opacity:  0; 
+      }
+
+      .black-background {
+        background: #000000;
+        
+      }
+      .green-background {
+        background: #74CBA0;
       }
 
     </style>
 
-    <div id="js-black-bg" class="black-background"></div>
+    <div id="js-black-bg" class="background black-background"></div>
+    <div id="js-green-bg" class="background green-background"></div>
     
     <!-- <div class="el" id="js-el"></div> -->
 
