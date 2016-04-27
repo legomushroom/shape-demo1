@@ -13,13 +13,13 @@ class WhiteTriangles extends Module {
     super._render();
     let blackBg = document.querySelector('#js-black-bg');
     this.timeline = new mojs.Timeline({
-      onStart: function () {
-        console.log('start', this._props.name);
-        blackBg.style.opacity = 1;
+      onStart: function (isForward) {
+        console.log('start', this._props.name, isForward);
+        isForward && (blackBg.style.opacity = 1);
       },
-      onComplete: function () {
-        blackBg.style.opacity = 0;
-        console.log('comple', this._props.name);
+      onComplete: function (isForward) {
+        isForward && (blackBg.style.opacity = 0);
+        console.log('comple', this._props.name, isForward);
       }
     });
     

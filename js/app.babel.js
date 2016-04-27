@@ -17,10 +17,11 @@ class Demo extends Module {
   _render () {
     this.mainTimeline = new mojs.Timeline();
     this.mainTimeline.add( new Triangles );
-    this.mainTimeline.append( new GreenScene );
+    this.mainTimeline.add( new GreenScene );
 
     this.player = new MojsPlayer({
-      add: this.mainTimeline
+      add: this.mainTimeline,
+      className: 'player'
     });
   }
 }

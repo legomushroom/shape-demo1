@@ -71,11 +71,11 @@
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
-	var _mojsPlayer = __webpack_require__(78);
+	var _mojsPlayer = __webpack_require__(77);
 
 	var _mojsPlayer2 = _interopRequireDefault(_mojsPlayer);
 
-	var _module = __webpack_require__(77);
+	var _module = __webpack_require__(153);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -112,10 +112,11 @@
 	  Demo.prototype._render = function _render() {
 	    this.mainTimeline = new mojs.Timeline();
 	    this.mainTimeline.add(new _triangles2.default());
-	    this.mainTimeline.append(new _greenScene2.default());
+	    this.mainTimeline.add(new _greenScene2.default());
 
 	    this.player = new _mojsPlayer2.default({
-	      add: this.mainTimeline
+	      add: this.mainTimeline,
+	      className: 'player'
 	    });
 	  };
 
@@ -1778,277 +1779,6 @@
 /* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _typeof2 = __webpack_require__(4);
-
-	var _typeof3 = _interopRequireDefault(_typeof2);
-
-	var _classCallCheck2 = __webpack_require__(2);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/*
-	  Base class for all modules.
-	  Extends _defaults to _props
-	*/
-
-	var Module = function () {
-	  /*
-	    constructor method calls scaffolding methods.
-	  */
-
-	  function Module() {
-	    var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    (0, _classCallCheck3.default)(this, Module);
-
-	    this._o = o;
-	    this._index = this._o.index || 0;
-	    this._declareDefaults();
-	    this._extendDefaults();
-	    this._vars();
-	    this._render();
-	  }
-	  /*
-	    Method to declare defaults.
-	    @private
-	  */
-
-
-	  Module.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      isPrepend: false,
-	      isRipple: false,
-	      prefix: ''
-	    };
-	  };
-	  /*
-	    Method to add pointer down even listener to el.
-	    @param {Object}   HTMLElement to add event listener on.
-	    @param {Function} Event listener callback.
-	  */
-
-
-	  Module.prototype._addPointerDownEvent = function _addPointerDownEvent(el, fn) {
-	    if (window.navigator.msPointerEnabled) {
-	      el.addEventListener('MSPointerDown', fn);
-	    } else if (window.ontouchstart !== undefined) {
-	      el.addEventListener('touchstart', fn);
-	      el.addEventListener('mousedown', fn);
-	    } else {
-	      el.addEventListener('mousedown', fn);
-	    }
-	  };
-	  /*
-	    Method to add pointer up even listener to el.
-	    @param {Object}   HTMLElement to add event listener on.
-	    @param {Function} Event listener callback.
-	  */
-
-
-	  Module.prototype._addPointerUpEvent = function _addPointerUpEvent(el, fn) {
-	    if (window.navigator.msPointerEnabled) {
-	      el.addEventListener('MSPointerUp', fn);
-	    } else if (window.ontouchstart !== undefined) {
-	      el.addEventListener('touchend', fn);
-	      el.addEventListener('mouseup', fn);
-	    } else {
-	      el.addEventListener('mouseup', fn);
-	    }
-	  };
-	  /*
-	    Method to check if variable holds link to a function.
-	    @param {Function?} A variable to check.
-	    @returns {Boolean} If passed variable is a function.
-	  */
-
-
-	  Module.prototype._isFunction = function _isFunction(fn) {
-	    return typeof fn === 'function';
-	  };
-	  /*
-	    Method to a function or silently fail.
-	    @param {Function?} A variable to check.
-	    @param {Array like} Arguments.
-	  */
-
-
-	  Module.prototype._callIfFunction = function _callIfFunction(fn) {
-	    Array.prototype.shift.call(arguments);
-	    this._isFunction(fn) && fn.apply(this, arguments);
-	  };
-	  /*
-	    Method to declare module's variables.
-	    @private
-	  */
-
-
-	  Module.prototype._vars = function _vars() {};
-	  /*
-	    Method to render on initialization.
-	    @private
-	  */
-
-
-	  Module.prototype._render = function _render() {
-	    this._addMainElement();
-	  };
-	  /*
-	    Method to add `this.el` on the module.
-	    @private
-	    @param {String} Tag name of the element.
-	  */
-
-
-	  Module.prototype._addMainElement = function _addMainElement() {
-	    var tagName = arguments.length <= 0 || arguments[0] === undefined ? 'div' : arguments[0];
-
-	    var p = this._props;
-
-	    this.el = this._createElement(tagName);
-	    this._addMainClasses();
-
-	    var method = p.isPrepend ? 'prepend' : 'append';
-	    this['_' + method + 'Child'](p.parent, this.el);
-	  };
-	  /*
-	    Method to classes on `this.el`.
-	    @private
-	  */
-
-
-	  Module.prototype._addMainClasses = function _addMainClasses() {
-	    var p = this._props;
-	    if (p.className instanceof Array) {
-	      for (var i = 0; i < p.className.length; i++) {
-	        this._addClass(this.el, p.className[i]);
-	      }
-	    } else {
-	      this._addClass(this.el, p.className);
-	    }
-	  };
-	  /*
-	    Method to add a class on el.
-	    @private
-	    @param {Object} HTML element to add the class on.
-	    @param {String} Class name to add.
-	  */
-
-
-	  Module.prototype._addClass = function _addClass(el, className) {
-	    className && el.classList.add(className);
-	  };
-	  /*
-	    Method to set property on the module.
-	    @private
-	    @param {String, Object} Name of the property to set
-	                            or object with properties to set.
-	    @param {Any} Value for the property to set. Could be
-	                  undefined if the first param is object.
-	  */
-
-
-	  Module.prototype._setProp = function _setProp(attr, value) {
-	    if ((typeof attr === 'undefined' ? 'undefined' : (0, _typeof3.default)(attr)) === 'object') {
-	      for (var key in attr) {
-	        this._assignProp(key, attr[key]);
-	      }
-	    } else {
-	      this._assignProp(attr, value);
-	    }
-	  };
-	  /*
-	    Method to assign single property's value.
-	    @private
-	    @param {String} Property name.
-	    @param {Any}    Property value.
-	  */
-
-
-	  Module.prototype._assignProp = function _assignProp(key, value) {
-	    this._props[key] = value;
-	  };
-	  /*
-	    Method to copy `_o` options to `_props` object
-	    with fallback to `_defaults`.
-	    @private
-	  */
-
-
-	  Module.prototype._extendDefaults = function _extendDefaults() {
-	    this._props = {};
-	    // this._deltas = {};
-	    for (var key in this._defaults) {
-	      var value = this._o[key];
-	      this.isIt && console.log(key);
-	      // copy the properties to the _o object
-	      this._assignProp(key, value != null ? value : this._defaults[key]);
-	    }
-	  };
-	  /*
-	    Method to create HTMLElement from tag name.
-	    @private
-	    @param {String} Name of the tag to create `HTML` element.
-	    @returns {Object} HtmlElement.
-	  */
-
-
-	  Module.prototype._createElement = function _createElement(tagName) {
-	    return document.createElement(tagName);
-	  };
-	  /*
-	    Method to create HTMLElement and append it to the `el` with a className.
-	    @private
-	    @param {String} The tagname for the HTMLElement.
-	    @param {String} Optional class name to add to the new child.
-	    @returns {Object} The newely created HTMLElement.
-	  */
-
-
-	  Module.prototype._createChild = function _createChild(tagName, className) {
-	    var child = this._createElement('div');
-	    className && child.classList.add(className);
-	    this.el.appendChild(child);
-	    return child;
-	  };
-	  /*
-	    Method to prepend child to the el.
-	    @private
-	    @param {Object} Parent HTMLElement.
-	    @param {Object} Child HTMLElement.
-	  */
-
-
-	  Module.prototype._appendChild = function _appendChild(el, childEl) {
-	    el.appendChild(childEl);
-	  };
-	  /*
-	    Method to prepend child to the el.
-	    @private
-	    @param {Object} Parent HTMLElement.
-	    @param {Object} Child HTMLElement.
-	  */
-
-
-	  Module.prototype._prependChild = function _prependChild(el, childEl) {
-	    el.insertBefore(childEl, el.firstChild);
-	  };
-
-	  return Module;
-	}();
-
-	exports.default = Module;
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! 
 		:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 		Oleg Solomka @LegoMushroom 2016 MIT
@@ -2065,43 +1795,43 @@
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
-	var _icons = __webpack_require__(80);
+	var _icons = __webpack_require__(79);
 
 	var _icons2 = _interopRequireDefault(_icons);
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _playerSlider = __webpack_require__(82);
+	var _playerSlider = __webpack_require__(81);
 
 	var _playerSlider2 = _interopRequireDefault(_playerSlider);
 
-	var _iconButton = __webpack_require__(102);
+	var _iconButton = __webpack_require__(101);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _speedControl = __webpack_require__(114);
+	var _speedControl = __webpack_require__(113);
 
 	var _speedControl2 = _interopRequireDefault(_speedControl);
 
-	var _playButton = __webpack_require__(126);
+	var _playButton = __webpack_require__(125);
 
 	var _playButton2 = _interopRequireDefault(_playButton);
 
-	var _stopButton = __webpack_require__(134);
+	var _stopButton = __webpack_require__(133);
 
 	var _stopButton2 = _interopRequireDefault(_stopButton);
 
-	var _repeatButton = __webpack_require__(138);
+	var _repeatButton = __webpack_require__(137);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
-	var _boundsButton = __webpack_require__(146);
+	var _boundsButton = __webpack_require__(145);
 
 	var _boundsButton2 = _interopRequireDefault(_boundsButton);
 
-	var _hideButton = __webpack_require__(147);
+	var _hideButton = __webpack_require__(146);
 
 	var _hideButton2 = _interopRequireDefault(_hideButton);
 
@@ -2113,8 +1843,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(151);
-	var CLASSES = __webpack_require__(153);
+	__webpack_require__(150);
+	var CLASSES = __webpack_require__(152);
 
 	var MojsPlayer = function (_Module) {
 	  _inherits(MojsPlayer, _Module);
@@ -2456,8 +2186,8 @@
 	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {
 	    if (this._props.isPlaying && isForward) {
 	      if (this._props.isRepeat) {
-	        this._sysTween.stop();
-	        this._play();
+	        this._sysTween.replay();
+	        // this._play();
 	      }
 	    }
 	  };
@@ -2684,10 +2414,10 @@
 	_global.MojsPlayer = MojsPlayer;
 
 	exports.default = MojsPlayer;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(79)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(78)(module), (function() { return this; }())))
 
 /***/ },
-/* 79 */
+/* 78 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -2703,14 +2433,14 @@
 
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -2760,7 +2490,7 @@
 	exports.default = Icons;
 
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3026,18 +2756,18 @@
 	exports.default = Module;
 
 /***/ },
-/* 82 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _slider = __webpack_require__(83);
+	var _slider = __webpack_require__(82);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -3049,9 +2779,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(99);
-	var CLASSES = __webpack_require__(101);
-	var SLIDER_CLASSES = __webpack_require__(98);
+	__webpack_require__(98);
+	var CLASSES = __webpack_require__(100);
+	var SLIDER_CLASSES = __webpack_require__(97);
 
 	var PlayerSlider = function (_Module) {
 	  _inherits(PlayerSlider, _Module);
@@ -3245,22 +2975,22 @@
 	exports.default = PlayerSlider;
 
 /***/ },
-/* 83 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _handle = __webpack_require__(84);
+	var _handle = __webpack_require__(83);
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _track = __webpack_require__(91);
+	var _track = __webpack_require__(90);
 
 	var _track2 = _interopRequireDefault(_track);
 
@@ -3272,8 +3002,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(96);
-	var CLASSES = __webpack_require__(98);
+	__webpack_require__(95);
+	var CLASSES = __webpack_require__(97);
 
 	var Slider = function (_Module) {
 	  _inherits(Slider, _Module);
@@ -3484,18 +3214,18 @@
 	exports.default = Slider;
 
 /***/ },
-/* 84 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(85);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
@@ -3507,8 +3237,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(86);
-	var CLASSES = __webpack_require__(90);
+	__webpack_require__(85);
+	var CLASSES = __webpack_require__(89);
 
 	var Handle = function (_Module) {
 	  _inherits(Handle, _Module);
@@ -3869,7 +3599,7 @@
 	exports.default = Handle;
 
 /***/ },
-/* 85 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.7 - 2016-04-22
@@ -6518,16 +6248,16 @@
 
 
 /***/ },
-/* 86 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(87);
+	var content = __webpack_require__(86);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -6544,10 +6274,10 @@
 	}
 
 /***/ },
-/* 87 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -6558,7 +6288,7 @@
 
 
 /***/ },
-/* 88 */
+/* 87 */
 /***/ function(module, exports) {
 
 	/*
@@ -6614,7 +6344,7 @@
 
 
 /***/ },
-/* 89 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -6866,7 +6596,7 @@
 
 
 /***/ },
-/* 90 */
+/* 89 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -6878,22 +6608,22 @@
 	};
 
 /***/ },
-/* 91 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _handle = __webpack_require__(84);
+	var _handle = __webpack_require__(83);
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _hammerjs = __webpack_require__(85);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _ripple = __webpack_require__(92);
+	var _ripple = __webpack_require__(91);
 
 	var _ripple2 = _interopRequireDefault(_ripple);
 
@@ -6905,8 +6635,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(93);
-	var CLASSES = __webpack_require__(95);
+	__webpack_require__(92);
+	var CLASSES = __webpack_require__(94);
 
 	var Track = function (_Handle) {
 	  _inherits(Track, _Handle);
@@ -7042,14 +6772,14 @@
 	exports.default = Track;
 
 /***/ },
-/* 92 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -7183,16 +6913,16 @@
 	exports.default = Ripple;
 
 /***/ },
-/* 93 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(94);
+	var content = __webpack_require__(93);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7209,10 +6939,10 @@
 	}
 
 /***/ },
-/* 94 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7223,7 +6953,7 @@
 
 
 /***/ },
-/* 95 */
+/* 94 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7237,16 +6967,16 @@
 	};
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(97);
+	var content = __webpack_require__(96);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7263,10 +6993,10 @@
 	}
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7277,7 +7007,7 @@
 
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7290,16 +7020,16 @@
 	};
 
 /***/ },
-/* 99 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(100);
+	var content = __webpack_require__(99);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7316,10 +7046,10 @@
 	}
 
 /***/ },
-/* 100 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7330,7 +7060,7 @@
 
 
 /***/ },
-/* 101 */
+/* 100 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7339,18 +7069,18 @@
 	};
 
 /***/ },
-/* 102 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _icon = __webpack_require__(103);
+	var _icon = __webpack_require__(102);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
-	var _button = __webpack_require__(107);
+	var _button = __webpack_require__(106);
 
 	var _button2 = _interopRequireDefault(_button);
 
@@ -7362,8 +7092,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(111);
-	var CLASSES = __webpack_require__(113);
+	__webpack_require__(110);
+	var CLASSES = __webpack_require__(112);
 
 	var IconButton = function (_Button) {
 	  _inherits(IconButton, _Button);
@@ -7413,18 +7143,18 @@
 	exports.default = IconButton;
 
 /***/ },
-/* 103 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(85);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
@@ -7436,8 +7166,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(104);
-	var CLASSES = __webpack_require__(106);
+	__webpack_require__(103);
+	var CLASSES = __webpack_require__(105);
 
 	var Icon = function (_Module) {
 	  _inherits(Icon, _Module);
@@ -7512,16 +7242,16 @@
 	exports.default = Icon;
 
 /***/ },
-/* 104 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(105);
+	var content = __webpack_require__(104);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7538,10 +7268,10 @@
 	}
 
 /***/ },
-/* 105 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7552,7 +7282,7 @@
 
 
 /***/ },
-/* 106 */
+/* 105 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7561,22 +7291,22 @@
 	};
 
 /***/ },
-/* 107 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(85);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _ripple = __webpack_require__(92);
+	var _ripple = __webpack_require__(91);
 
 	var _ripple2 = _interopRequireDefault(_ripple);
 
@@ -7588,8 +7318,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(108);
-	var CLASSES = __webpack_require__(110);
+	__webpack_require__(107);
+	var CLASSES = __webpack_require__(109);
 
 	var Button = function (_Module) {
 	  _inherits(Button, _Module);
@@ -7713,16 +7443,16 @@
 	exports.default = Button;
 
 /***/ },
-/* 108 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(109);
+	var content = __webpack_require__(108);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7739,10 +7469,10 @@
 	}
 
 /***/ },
-/* 109 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7753,7 +7483,7 @@
 
 
 /***/ },
-/* 110 */
+/* 109 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7762,16 +7492,16 @@
 	};
 
 /***/ },
-/* 111 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(112);
+	var content = __webpack_require__(111);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -7788,10 +7518,10 @@
 	}
 
 /***/ },
-/* 112 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -7802,7 +7532,7 @@
 
 
 /***/ },
-/* 113 */
+/* 112 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -7811,22 +7541,22 @@
 	};
 
 /***/ },
-/* 114 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _module = __webpack_require__(81);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _labelButton = __webpack_require__(115);
+	var _labelButton = __webpack_require__(114);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
-	var _slider = __webpack_require__(83);
+	var _slider = __webpack_require__(82);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
@@ -7838,8 +7568,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(123);
-	var CLASSES = __webpack_require__(125);
+	__webpack_require__(122);
+	var CLASSES = __webpack_require__(124);
 
 	var SpeedControl = function (_Module) {
 	  _inherits(SpeedControl, _Module);
@@ -8057,14 +7787,14 @@
 	exports.default = SpeedControl;
 
 /***/ },
-/* 115 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _buttonSwitch = __webpack_require__(116);
+	var _buttonSwitch = __webpack_require__(115);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
@@ -8076,8 +7806,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(120);
-	var CLASSES = __webpack_require__(122);
+	__webpack_require__(119);
+	var CLASSES = __webpack_require__(121);
 
 	var LabelButton = function (_ButtonSwitch) {
 	  _inherits(LabelButton, _ButtonSwitch);
@@ -8146,14 +7876,14 @@
 	exports.default = LabelButton;
 
 /***/ },
-/* 116 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _button = __webpack_require__(107);
+	var _button = __webpack_require__(106);
 
 	var _button2 = _interopRequireDefault(_button);
 
@@ -8165,8 +7895,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(117);
-	var CLASSES = __webpack_require__(119);
+	__webpack_require__(116);
+	var CLASSES = __webpack_require__(118);
 
 	var ButtonSwitch = function (_Button) {
 	  _inherits(ButtonSwitch, _Button);
@@ -8286,16 +8016,16 @@
 	exports.default = ButtonSwitch;
 
 /***/ },
-/* 117 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(118);
+	var content = __webpack_require__(117);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8312,10 +8042,10 @@
 	}
 
 /***/ },
-/* 118 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8326,7 +8056,7 @@
 
 
 /***/ },
-/* 119 */
+/* 118 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8335,16 +8065,16 @@
 	};
 
 /***/ },
-/* 120 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(121);
+	var content = __webpack_require__(120);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8361,10 +8091,10 @@
 	}
 
 /***/ },
-/* 121 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8375,7 +8105,7 @@
 
 
 /***/ },
-/* 122 */
+/* 121 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8384,16 +8114,16 @@
 	};
 
 /***/ },
-/* 123 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(124);
+	var content = __webpack_require__(123);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8410,10 +8140,10 @@
 	}
 
 /***/ },
-/* 124 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8424,7 +8154,7 @@
 
 
 /***/ },
-/* 125 */
+/* 124 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8435,14 +8165,14 @@
 	};
 
 /***/ },
-/* 126 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _iconFork = __webpack_require__(127);
+	var _iconFork = __webpack_require__(126);
 
 	var _iconFork2 = _interopRequireDefault(_iconFork);
 
@@ -8454,8 +8184,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(131);
-	var CLASSES = __webpack_require__(133);
+	__webpack_require__(130);
+	var CLASSES = __webpack_require__(132);
 	// PLAYER_BTN_CLASSES = require('css/blocks/player-button.postcss.css.json');
 
 	var PlayButton = function (_IconFork) {
@@ -8496,18 +8226,18 @@
 	exports.default = PlayButton;
 
 /***/ },
-/* 127 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _buttonSwitch = __webpack_require__(116);
+	var _buttonSwitch = __webpack_require__(115);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
-	var _icon = __webpack_require__(103);
+	var _icon = __webpack_require__(102);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
@@ -8521,8 +8251,8 @@
 
 	// import HammerJS from 'hammerjs'
 
-	__webpack_require__(128);
-	var CLASSES = __webpack_require__(130);
+	__webpack_require__(127);
+	var CLASSES = __webpack_require__(129);
 
 	var IconFork = function (_ButtonSwitch) {
 	  _inherits(IconFork, _ButtonSwitch);
@@ -8572,16 +8302,16 @@
 	exports.default = IconFork;
 
 /***/ },
-/* 128 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(129);
+	var content = __webpack_require__(128);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8598,10 +8328,10 @@
 	}
 
 /***/ },
-/* 129 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8612,7 +8342,7 @@
 
 
 /***/ },
-/* 130 */
+/* 129 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8622,16 +8352,16 @@
 	};
 
 /***/ },
-/* 131 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(132);
+	var content = __webpack_require__(131);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8648,10 +8378,10 @@
 	}
 
 /***/ },
-/* 132 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8662,7 +8392,7 @@
 
 
 /***/ },
-/* 133 */
+/* 132 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8670,14 +8400,14 @@
 	};
 
 /***/ },
-/* 134 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _iconButton = __webpack_require__(102);
+	var _iconButton = __webpack_require__(101);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
@@ -8689,8 +8419,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(135);
-	var CLASSES = __webpack_require__(137);
+	__webpack_require__(134);
+	var CLASSES = __webpack_require__(136);
 
 	var StopButton = function (_IconButton) {
 	  _inherits(StopButton, _IconButton);
@@ -8725,16 +8455,16 @@
 	exports.default = StopButton;
 
 /***/ },
-/* 135 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(136);
+	var content = __webpack_require__(135);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8751,10 +8481,10 @@
 	}
 
 /***/ },
-/* 136 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8765,7 +8495,7 @@
 
 
 /***/ },
-/* 137 */
+/* 136 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8773,14 +8503,14 @@
 	};
 
 /***/ },
-/* 138 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _opacitySwitch = __webpack_require__(139);
+	var _opacitySwitch = __webpack_require__(138);
 
 	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
 
@@ -8792,8 +8522,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(143);
-	var CLASSES = __webpack_require__(145);
+	__webpack_require__(142);
+	var CLASSES = __webpack_require__(144);
 
 	var RepeatButton = function (_OpacitySwitch) {
 	  _inherits(RepeatButton, _OpacitySwitch);
@@ -8835,18 +8565,18 @@
 	exports.default = RepeatButton;
 
 /***/ },
-/* 139 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _icon = __webpack_require__(103);
+	var _icon = __webpack_require__(102);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
-	var _buttonSwitch = __webpack_require__(116);
+	var _buttonSwitch = __webpack_require__(115);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
@@ -8858,8 +8588,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(140);
-	var CLASSES = __webpack_require__(142);
+	__webpack_require__(139);
+	var CLASSES = __webpack_require__(141);
 
 	var OpacitySwitch = function (_ButtonSwitch) {
 	  _inherits(OpacitySwitch, _ButtonSwitch);
@@ -8920,16 +8650,16 @@
 	exports.default = OpacitySwitch;
 
 /***/ },
-/* 140 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(141);
+	var content = __webpack_require__(140);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8946,10 +8676,10 @@
 	}
 
 /***/ },
-/* 141 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -8960,7 +8690,7 @@
 
 
 /***/ },
-/* 142 */
+/* 141 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -8970,16 +8700,16 @@
 	};
 
 /***/ },
-/* 143 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(144);
+	var content = __webpack_require__(143);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -8996,10 +8726,10 @@
 	}
 
 /***/ },
-/* 144 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -9010,7 +8740,7 @@
 
 
 /***/ },
-/* 145 */
+/* 144 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9018,14 +8748,14 @@
 	};
 
 /***/ },
-/* 146 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _repeatButton = __webpack_require__(138);
+	var _repeatButton = __webpack_require__(137);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
@@ -9067,18 +8797,18 @@
 	exports.default = BoundsButton;
 
 /***/ },
-/* 147 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _buttonSwitch = __webpack_require__(116);
+	var _buttonSwitch = __webpack_require__(115);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
-	var _icon = __webpack_require__(103);
+	var _icon = __webpack_require__(102);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
@@ -9090,8 +8820,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	__webpack_require__(148);
-	var CLASSES = __webpack_require__(150),
+	__webpack_require__(147);
+	var CLASSES = __webpack_require__(149),
 	    className = 'hide-button';
 
 	var HideButton = function (_ButtonSwitch) {
@@ -9152,16 +8882,16 @@
 	exports.default = HideButton;
 
 /***/ },
-/* 148 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(149);
+	var content = __webpack_require__(148);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -9178,10 +8908,10 @@
 	}
 
 /***/ },
-/* 149 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -9192,7 +8922,7 @@
 
 
 /***/ },
-/* 150 */
+/* 149 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9202,16 +8932,16 @@
 	};
 
 /***/ },
-/* 151 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(152);
+	var content = __webpack_require__(151);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(89)(content, {});
+	var update = __webpack_require__(88)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -9228,10 +8958,10 @@
 	}
 
 /***/ },
-/* 152 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(88)();
+	exports = module.exports = __webpack_require__(87)();
 	// imports
 
 
@@ -9242,7 +8972,7 @@
 
 
 /***/ },
-/* 153 */
+/* 152 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9254,6 +8984,277 @@
 		"is-hidden": "_is-hidden_1uepo_40",
 		"is-transition": "_is-transition_1uepo_43"
 	};
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _typeof2 = __webpack_require__(4);
+
+	var _typeof3 = _interopRequireDefault(_typeof2);
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/*
+	  Base class for all modules.
+	  Extends _defaults to _props
+	*/
+
+	var Module = function () {
+	  /*
+	    constructor method calls scaffolding methods.
+	  */
+
+	  function Module() {
+	    var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    (0, _classCallCheck3.default)(this, Module);
+
+	    this._o = o;
+	    this._index = this._o.index || 0;
+	    this._declareDefaults();
+	    this._extendDefaults();
+	    this._vars();
+	    this._render();
+	  }
+	  /*
+	    Method to declare defaults.
+	    @private
+	  */
+
+
+	  Module.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: '',
+	      parent: document.body,
+	      isPrepend: false,
+	      isRipple: false,
+	      prefix: ''
+	    };
+	  };
+	  /*
+	    Method to add pointer down even listener to el.
+	    @param {Object}   HTMLElement to add event listener on.
+	    @param {Function} Event listener callback.
+	  */
+
+
+	  Module.prototype._addPointerDownEvent = function _addPointerDownEvent(el, fn) {
+	    if (window.navigator.msPointerEnabled) {
+	      el.addEventListener('MSPointerDown', fn);
+	    } else if (window.ontouchstart !== undefined) {
+	      el.addEventListener('touchstart', fn);
+	      el.addEventListener('mousedown', fn);
+	    } else {
+	      el.addEventListener('mousedown', fn);
+	    }
+	  };
+	  /*
+	    Method to add pointer up even listener to el.
+	    @param {Object}   HTMLElement to add event listener on.
+	    @param {Function} Event listener callback.
+	  */
+
+
+	  Module.prototype._addPointerUpEvent = function _addPointerUpEvent(el, fn) {
+	    if (window.navigator.msPointerEnabled) {
+	      el.addEventListener('MSPointerUp', fn);
+	    } else if (window.ontouchstart !== undefined) {
+	      el.addEventListener('touchend', fn);
+	      el.addEventListener('mouseup', fn);
+	    } else {
+	      el.addEventListener('mouseup', fn);
+	    }
+	  };
+	  /*
+	    Method to check if variable holds link to a function.
+	    @param {Function?} A variable to check.
+	    @returns {Boolean} If passed variable is a function.
+	  */
+
+
+	  Module.prototype._isFunction = function _isFunction(fn) {
+	    return typeof fn === 'function';
+	  };
+	  /*
+	    Method to a function or silently fail.
+	    @param {Function?} A variable to check.
+	    @param {Array like} Arguments.
+	  */
+
+
+	  Module.prototype._callIfFunction = function _callIfFunction(fn) {
+	    Array.prototype.shift.call(arguments);
+	    this._isFunction(fn) && fn.apply(this, arguments);
+	  };
+	  /*
+	    Method to declare module's variables.
+	    @private
+	  */
+
+
+	  Module.prototype._vars = function _vars() {};
+	  /*
+	    Method to render on initialization.
+	    @private
+	  */
+
+
+	  Module.prototype._render = function _render() {
+	    this._addMainElement();
+	  };
+	  /*
+	    Method to add `this.el` on the module.
+	    @private
+	    @param {String} Tag name of the element.
+	  */
+
+
+	  Module.prototype._addMainElement = function _addMainElement() {
+	    var tagName = arguments.length <= 0 || arguments[0] === undefined ? 'div' : arguments[0];
+
+	    var p = this._props;
+
+	    this.el = this._createElement(tagName);
+	    this._addMainClasses();
+
+	    var method = p.isPrepend ? 'prepend' : 'append';
+	    this['_' + method + 'Child'](p.parent, this.el);
+	  };
+	  /*
+	    Method to classes on `this.el`.
+	    @private
+	  */
+
+
+	  Module.prototype._addMainClasses = function _addMainClasses() {
+	    var p = this._props;
+	    if (p.className instanceof Array) {
+	      for (var i = 0; i < p.className.length; i++) {
+	        this._addClass(this.el, p.className[i]);
+	      }
+	    } else {
+	      this._addClass(this.el, p.className);
+	    }
+	  };
+	  /*
+	    Method to add a class on el.
+	    @private
+	    @param {Object} HTML element to add the class on.
+	    @param {String} Class name to add.
+	  */
+
+
+	  Module.prototype._addClass = function _addClass(el, className) {
+	    className && el.classList.add(className);
+	  };
+	  /*
+	    Method to set property on the module.
+	    @private
+	    @param {String, Object} Name of the property to set
+	                            or object with properties to set.
+	    @param {Any} Value for the property to set. Could be
+	                  undefined if the first param is object.
+	  */
+
+
+	  Module.prototype._setProp = function _setProp(attr, value) {
+	    if ((typeof attr === 'undefined' ? 'undefined' : (0, _typeof3.default)(attr)) === 'object') {
+	      for (var key in attr) {
+	        this._assignProp(key, attr[key]);
+	      }
+	    } else {
+	      this._assignProp(attr, value);
+	    }
+	  };
+	  /*
+	    Method to assign single property's value.
+	    @private
+	    @param {String} Property name.
+	    @param {Any}    Property value.
+	  */
+
+
+	  Module.prototype._assignProp = function _assignProp(key, value) {
+	    this._props[key] = value;
+	  };
+	  /*
+	    Method to copy `_o` options to `_props` object
+	    with fallback to `_defaults`.
+	    @private
+	  */
+
+
+	  Module.prototype._extendDefaults = function _extendDefaults() {
+	    this._props = {};
+	    // this._deltas = {};
+	    for (var key in this._defaults) {
+	      var value = this._o[key];
+	      this.isIt && console.log(key);
+	      // copy the properties to the _o object
+	      this._assignProp(key, value != null ? value : this._defaults[key]);
+	    }
+	  };
+	  /*
+	    Method to create HTMLElement from tag name.
+	    @private
+	    @param {String} Name of the tag to create `HTML` element.
+	    @returns {Object} HtmlElement.
+	  */
+
+
+	  Module.prototype._createElement = function _createElement(tagName) {
+	    return document.createElement(tagName);
+	  };
+	  /*
+	    Method to create HTMLElement and append it to the `el` with a className.
+	    @private
+	    @param {String} The tagname for the HTMLElement.
+	    @param {String} Optional class name to add to the new child.
+	    @returns {Object} The newely created HTMLElement.
+	  */
+
+
+	  Module.prototype._createChild = function _createChild(tagName, className) {
+	    var child = this._createElement('div');
+	    className && child.classList.add(className);
+	    this.el.appendChild(child);
+	    return child;
+	  };
+	  /*
+	    Method to prepend child to the el.
+	    @private
+	    @param {Object} Parent HTMLElement.
+	    @param {Object} Child HTMLElement.
+	  */
+
+
+	  Module.prototype._appendChild = function _appendChild(el, childEl) {
+	    el.appendChild(childEl);
+	  };
+	  /*
+	    Method to prepend child to the el.
+	    @private
+	    @param {Object} Parent HTMLElement.
+	    @param {Object} Child HTMLElement.
+	  */
+
+
+	  Module.prototype._prependChild = function _prependChild(el, childEl) {
+	    el.insertBefore(childEl, el.firstChild);
+	  };
+
+	  return Module;
+	}();
+
+	exports.default = Module;
 
 /***/ },
 /* 154 */
@@ -9345,7 +9346,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(77);
+	var _module = __webpack_require__(153);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -9455,7 +9456,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(77);
+	var _module = __webpack_require__(153);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -9483,13 +9484,13 @@
 	    _Module.prototype._render.call(this);
 	    var blackBg = document.querySelector('#js-black-bg');
 	    this.timeline = new mojs.Timeline({
-	      onStart: function onStart() {
-	        console.log('start', this._props.name);
-	        blackBg.style.opacity = 1;
+	      onStart: function onStart(isForward) {
+	        console.log('start', this._props.name, isForward);
+	        isForward && (blackBg.style.opacity = 1);
 	      },
-	      onComplete: function onComplete() {
-	        blackBg.style.opacity = 0;
-	        console.log('comple', this._props.name);
+	      onComplete: function onComplete(isForward) {
+	        isForward && (blackBg.style.opacity = 0);
+	        console.log('comple', this._props.name, isForward);
 	      }
 	    });
 
@@ -9589,7 +9590,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(77);
+	var _module = __webpack_require__(153);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -9617,13 +9618,14 @@
 	    _Module.prototype._render.call(this);
 	    var greenBg = document.querySelector('#js-green-bg');
 	    this.timeline = new mojs.Timeline({
-	      onStart: function onStart() {
-	        console.log('start', this._props.name);
-	        greenBg.style.opacity = 1;
+	      delay: 2700,
+	      onStart: function onStart(isForward) {
+	        // console.log('start', this._props.name, isForward);
+	        isForward && (greenBg.style.opacity = 1);
 	      },
-	      onComplete: function onComplete() {
-	        greenBg.style.opacity = 0;
-	        console.log('comple', this._props.name);
+	      onComplete: function onComplete(isForward) {
+	        isForward && (greenBg.style.opacity = 0);
+	        // console.log('comple', this._props.name, isForward);
 	      }
 	    });
 
@@ -9635,18 +9637,13 @@
 	      angle: { '-240': 0 },
 	      radius: 25,
 	      scale: { 0: 2 },
-	      duration: 1200,
+	      duration: 1800,
 	      fill: 'none',
-	      easing: 'expo.out'
-	    });
-	    // .then({ strokeWidth: 5, radius: 50 });
+	      easing: 'expo.out',
+	      parent: greenBg
+	    }).then({ strokeWidth: 0 });
 
-	    this.timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare));
-	  };
-
-	  GreenScene.prototype._addTrail1 = function _addTrail1(pinkSquare) {
-	    var tm = new mojs.Timeline();
-	    var trailOpts = {
+	    this.trailOpts = {
 	      left: '40%', top: '23%',
 	      shape: 'circle',
 	      stroke: 'white',
@@ -9657,67 +9654,115 @@
 	      angle: -90,
 	      strokeDasharray: '20% 300%',
 	      strokeDashoffset: { '-75%': '-100%' },
-	      duration: 550,
+	      duration: 1250,
 	      delay: 200,
 	      parent: pinkSquare.el
 	    };
 
-	    var trail1 = new mojs.Transit(trailOpts);
+	    this.timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare), this._addTrail3(pinkSquare), this._addTrail4(pinkSquare));
+	  };
 
-	    trailOpts.angle = -150;
-	    trailOpts.top = '14%';
-	    trailOpts.left = '32%';
-	    trailOpts.radius = 15;
-	    trailOpts.radiusX = 10;
-	    var trail2 = new mojs.Transit(trailOpts);
+	  GreenScene.prototype._addTrail1 = function _addTrail1(pinkSquare) {
+	    var tm = new mojs.Timeline(),
+	        trail1 = new mojs.Transit(this.trailOpts);
 
-	    // trailOpts.stroke = 'red';
-	    trailOpts.angle = -120;
-	    trailOpts.top = '17%';
-	    trailOpts.left = '32%';
-	    trailOpts.radius = 10;
-	    trailOpts.radiusX = 7;
-	    var trail3 = new mojs.Transit(trailOpts);
+	    this.trailOpts.angle = -150;
+	    this.trailOpts.top = '14%';
+	    this.trailOpts.left = '32%';
+	    this.trailOpts.radius = 15;
+	    this.trailOpts.radiusX = 10;
+	    var trail2 = new mojs.Transit(this.trailOpts);
+
+	    // this.trailOpts.stroke = 'red';
+	    this.trailOpts.angle = -120;
+	    this.trailOpts.top = '17%';
+	    this.trailOpts.left = '32%';
+	    this.trailOpts.radius = 10;
+	    this.trailOpts.radiusX = 7;
+	    var trail3 = new mojs.Transit(this.trailOpts);
 
 	    return tm.add(trail1, trail2, trail3);
 	  };
 
 	  GreenScene.prototype._addTrail2 = function _addTrail2(pinkSquare) {
 	    var tm = new mojs.Timeline();
-	    var trailOpts = {
-	      left: '78%', top: '40%',
-	      shape: 'circle',
-	      stroke: 'white',
-	      strokeWidth: { 5: 0 },
-	      fill: 'none',
-	      radius: 22,
-	      radiusX: 20,
-	      angle: 0,
-	      strokeDasharray: '20% 300%',
-	      strokeDashoffset: { '-75%': '-100%' },
-	      duration: 550,
-	      delay: 200,
-	      parent: pinkSquare.el
-	    };
 
-	    var trail1 = new mojs.Transit(trailOpts);
+	    this.trailOpts.left = '78%';
+	    this.trailOpts.top = '40%';
+	    this.trailOpts.radius = 22;
+	    this.trailOpts.radiusX = 20;
+	    this.trailOpts.angle = 0;
+	    var trail1 = new mojs.Transit(this.trailOpts);
 
-	    trailOpts.angle = -60;
-	    // trailOpts.stroke = 'red';
-	    trailOpts.top = '32%';
-	    trailOpts.left = '85%';
-	    trailOpts.radius = 12;
-	    trailOpts.radiusX = 10;
-	    var trail2 = new mojs.Transit(trailOpts);
+	    this.trailOpts.angle = -60;
+	    this.trailOpts.top = '32%';
+	    this.trailOpts.left = '85%';
+	    this.trailOpts.radius = 12;
+	    this.trailOpts.radiusX = 10;
+	    var trail2 = new mojs.Transit(this.trailOpts);
 
-	    // trailOpts.stroke = 'red';
-	    trailOpts.angle = -0;
-	    // trailOpts.stroke = 'yellow';
-	    trailOpts.top = '37%';
-	    trailOpts.left = '78%';
-	    trailOpts.radius = 10;
-	    trailOpts.radiusX = 8;
-	    var trail3 = new mojs.Transit(trailOpts);
+	    this.trailOpts.angle = -0;
+	    this.trailOpts.top = '37%';
+	    this.trailOpts.left = '78%';
+	    this.trailOpts.radius = 10;
+	    this.trailOpts.radiusX = 8;
+	    var trail3 = new mojs.Transit(this.trailOpts);
+
+	    return tm.add(trail1, trail2, trail3);
+	  };
+
+	  GreenScene.prototype._addTrail3 = function _addTrail3(pinkSquare) {
+	    var tm = new mojs.Timeline();
+
+	    this.trailOpts.left = '59%';
+	    this.trailOpts.top = '81%';
+	    this.trailOpts.radius = 18;
+	    this.trailOpts.radiusX = 20;
+	    this.trailOpts.angle = 75;
+	    // this.trailOpts.strokeDasharray = '';
+	    var trail1 = new mojs.Transit(this.trailOpts);
+
+	    this.trailOpts.angle = 80;
+	    this.trailOpts.top = '81%';
+	    this.trailOpts.left = '60%';
+	    this.trailOpts.radius = 12;
+	    this.trailOpts.radiusX = 10;
+	    var trail2 = new mojs.Transit(this.trailOpts);
+
+	    this.trailOpts.angle = 45;
+	    this.trailOpts.left = '67%';
+	    this.trailOpts.top = '84%';
+	    this.trailOpts.radius = 10;
+	    this.trailOpts.radiusX = 8;
+	    var trail3 = new mojs.Transit(this.trailOpts);
+
+	    return tm.add(trail1, trail2, trail3);
+	  };
+
+	  GreenScene.prototype._addTrail4 = function _addTrail4(pinkSquare) {
+	    var tm = new mojs.Timeline();
+
+	    this.trailOpts.left = '17%';
+	    this.trailOpts.top = '60%';
+	    this.trailOpts.radius = 20;
+	    this.trailOpts.radiusX = 18;
+	    this.trailOpts.angle = 150;
+	    // this.trailOpts.strokeDasharray = '';
+	    var trail1 = new mojs.Transit(this.trailOpts);
+
+	    // this.trailOpts.angle   = 170;
+	    this.trailOpts.left = '16%';
+	    this.trailOpts.top = '66%';
+	    this.trailOpts.radius = 10;
+	    this.trailOpts.radiusX = 12;
+	    var trail2 = new mojs.Transit(this.trailOpts);
+
+	    this.trailOpts.angle = 180;
+	    this.trailOpts.left = '22%';
+	    this.trailOpts.top = '64%';
+	    this.trailOpts.radius = 8;
+	    this.trailOpts.radiusX = 10;
+	    var trail3 = new mojs.Transit(this.trailOpts);
 
 	    return tm.add(trail1, trail2, trail3);
 	  };
