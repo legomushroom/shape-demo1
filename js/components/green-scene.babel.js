@@ -1,33 +1,26 @@
-import Module        from './module';
+import Module from './module';
+import COLORS from './colors';
 
 class GreenScene extends Module {
-  constructor(o) {
-    super(o);
-    return this.timeline;
-  }
   /*
     Method for initial module's render.
     @private
   */
   _render () {
     super._render();
-    let greenBg = document.querySelector('#js-green-bg');
-    this.timeline = new mojs.Timeline({
-      delay: 2700,
-      onStart: function (isForward) {
-        isForward && (greenBg.style.opacity = 1);
-        !isForward && (greenBg.style.opacity = 0);
-      },
-      onComplete: function (isForward) {
-        isForward && (greenBg.style.opacity = 0);
-        !isForward && (greenBg.style.opacity = 1);
-      }
-    });
+    let greenBg = document.querySelector('#js-green-bg'),
+        timeline = new mojs.Timeline({
+          delay: this._props.delay,
+          onStart:(isFwd) => { this._toggleOpacity( greenBg, isFwd ); },
+          onComplete: (isFwd) => { this._toggleOpacity( greenBg, !isFwd ); }
+        });
+
+    greenBg.style[ 'background' ] = COLORS.GREEN;
 
     let pinkSquare = new mojs.Transit({
       left: '50%', top: '50%',
-      shape:  'rect',
-      stroke: 'hotpink',
+      shape: 'rect',
+      stroke: COLORS.HOTPINK,
       strokeWidth: 50,
       angle: { '-240': 0 },
       radius: 25,
@@ -58,7 +51,7 @@ class GreenScene extends Module {
       strokeDashoffset: {'-75%': '-100%'},
     }
     
-    this.timeline.add(
+    return timeline.add(
       pinkSquare,
       this._addTrail1( pinkSquare ),
       this._addTrail2( pinkSquare ),
@@ -66,10 +59,13 @@ class GreenScene extends Module {
       this._addTrail4( pinkSquare )
     );
   }
-
+  /*
+    Method to add trail.
+    @private
+    @returns {Array(Object)} Array of `Transits`.
+  */
   _addTrail1 ( pinkSquare ) {
-    let tm     = new mojs.Timeline,
-        trail1 = new mojs.Transit(this.trailOpts);
+    let trail1 = new mojs.Transit(this.trailOpts);
 
     this.trailOpts.angle = -150;
     this.trailOpts.top = '14%';
@@ -86,11 +82,14 @@ class GreenScene extends Module {
     this.trailOpts.radiusX = 7;
     let trail3 = new mojs.Transit(this.trailOpts);
 
-    return  tm.add( trail1, trail2, trail3 );
+    return [trail1, trail2, trail3];
   }
+  /*
+    Method to add trail.
+    @private
+    @returns {Array(Object)} Array of `Transits`.
+  */
   _addTrail2 ( pinkSquare ) {
-    let tm = new mojs.Timeline;
-    
     this.trailOpts.left    = '78%';
     this.trailOpts.top     = '40%';
     this.trailOpts.radius  = 22;
@@ -112,11 +111,14 @@ class GreenScene extends Module {
     this.trailOpts.radiusX = 8;
     let trail3 = new mojs.Transit(this.trailOpts);
 
-    return tm.add( trail1, trail2, trail3 );
+    return [ trail1, trail2, trail3 ];
   }
+  /*
+    Method to add trail.
+    @private
+    @returns {Array(Object)} Array of `Transits`.
+  */
   _addTrail3 ( pinkSquare ) {
-    let tm = new mojs.Timeline;
-    
     this.trailOpts.left    = '59%';
     this.trailOpts.top     = '81%';
     this.trailOpts.radius  = 18;
@@ -139,11 +141,14 @@ class GreenScene extends Module {
     this.trailOpts.radiusX = 8;
     let trail3 = new mojs.Transit(this.trailOpts);
 
-    return tm.add( trail1, trail2, trail3 );
+    return [ trail1, trail2, trail3 ];
   }
+  /*
+    Method to add trail.
+    @private
+    @returns {Array(Object)} Array of `Transits`.
+  */
   _addTrail4 ( pinkSquare ) {
-    let tm = new mojs.Timeline;
-    
     this.trailOpts.left    = '17%';
     this.trailOpts.top     = '60%';
     this.trailOpts.radius  = 20;
@@ -166,7 +171,7 @@ class GreenScene extends Module {
     this.trailOpts.radiusX = 10;
     let trail3 = new mojs.Transit(this.trailOpts);
 
-    return tm.add( trail1, trail2, trail3 );
+    return [ trail1, trail2, trail3 ];
   }
 }
 

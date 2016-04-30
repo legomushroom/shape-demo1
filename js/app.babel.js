@@ -16,15 +16,13 @@ class Demo extends Module {
     @private
   */
   _render () {
-    this.mainTimeline = new mojs.Timeline({ repeat: 0 });
-    this.mainTimeline.add( new Triangles );
-    this.mainTimeline.add( new GreenScene );
-    this.mainTimeline.add( new Circle );
+    const mainTimeline = ( new mojs.Timeline )
+      .add( new Triangles )
+      .add( new GreenScene({ delay: 2700 }) )
+      .add( new Circle({ delay: 4000 }) );
 
-    this.player = new MojsPlayer({
-      add: this.mainTimeline,
-      className: 'player'
-    });
+    ( new MojsPlayer({ add: mainTimeline }) )
+      .el.style[ 'z-index' ] = 10;
   }
 }
 

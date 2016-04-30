@@ -11,7 +11,7 @@ class Circle extends Module {
     
     let pinkBg   = this._findEl('#js-pink-bg'),
         timeline = new mojs.Timeline({
-          delay: 4000,
+          delay:   this._props.delay,
           onStart: ( isFwd ) => { this._toggleOpacity( pinkBg, isFwd ); },
           onComplete: ( isFwd ) => { this._toggleOpacity( pinkBg, !isFwd ); }
         });
@@ -54,6 +54,8 @@ class Circle extends Module {
         duration:   800
       });
 
+    // circle1.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+
     opts.fill     = COLORS.PINK;
     opts.scale    = { 0 : 2.25};
     opts.duration = 700;
@@ -65,11 +67,15 @@ class Circle extends Module {
         duration:   700
       });
 
+    // circle2.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+
     opts.fill     = COLORS.GREY;
     opts.scale    = { 0 : scale };
     opts.duration = 1000;
     opts.delay    = 2000;
     const circle3 = new mojs.Transit(opts);
+
+    // circle3.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
 
     return [ circle1, circle2, circle3 ];
   }

@@ -114,15 +114,9 @@
 	  */
 
 	  Demo.prototype._render = function _render() {
-	    this.mainTimeline = new mojs.Timeline({ repeat: 0 });
-	    this.mainTimeline.add(new _triangles2.default());
-	    this.mainTimeline.add(new _greenScene2.default());
-	    this.mainTimeline.add(new _circle2.default());
+	    var mainTimeline = new mojs.Timeline().add(new _triangles2.default()).add(new _greenScene2.default({ delay: 2700 })).add(new _circle2.default({ delay: 4000 }));
 
-	    this.player = new _mojsPlayer2.default({
-	      add: this.mainTimeline,
-	      className: 'player'
-	    });
+	    new _mojsPlayer2.default({ add: mainTimeline }).el.style['z-index'] = 10;
 	  };
 
 	  return Demo;
@@ -2198,10 +2192,8 @@
 
 
 	  MojsPlayer.prototype._reset = function _reset() {
-	    requestAnimationFrame( function () {
-	      this._sysTween.reset();
-	      this.timeline.reset();
-	    }.bind( this ) );
+	    this._sysTween.reset();
+	    this.timeline.reset();
 	  };
 	  /*
 	    Method to set play button state.
@@ -9073,9 +9065,7 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
-	      isPrepend: false,
-	      isRipple: false,
-	      prefix: ''
+	      delay: 0
 	    };
 	  };
 	  /*
@@ -9329,24 +9319,46 @@
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(153);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _colors = __webpack_require__(159);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var TriangleLines = function () {
-	  function TriangleLines() {
-	    var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    (0, _classCallCheck3.default)(this, TriangleLines);
+	var _mojs = mojs;
+	var Timeline = _mojs.Timeline;
 
-	    this._o = o;
-	    return this._render();
+	var TriangleLines = function (_Module) {
+	  (0, _inherits3.default)(TriangleLines, _Module);
+
+	  function TriangleLines() {
+	    (0, _classCallCheck3.default)(this, TriangleLines);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
+
 	  /*
 	    Method for initial module's render.
 	    @private
 	  */
 
-
 	  TriangleLines.prototype._render = function _render() {
-	    var timeline = new mojs.Timeline({ delay: this._o.delay || 0 }),
+	    return new Timeline({ delay: this._props.delay }).add(this._lines());
+	  };
+
+	  TriangleLines.prototype._lines = function _lines() {
+	    var blendMode = 'screen',
 	        o = {
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
@@ -9354,36 +9366,35 @@
 	      radius: { 150: 100 },
 	      angle: { '-70': '-60' },
 	      fill: 'none',
-	      stroke: 'cyan',
+	      stroke: _colors2.default.CYAN,
+	      strokeWidth: 3,
 	      strokeDasharray: { '50% 100%': '0% 100%' },
-	      strokeDashoffset: { '50%': '-66%' },
-	      strokeWidth: 3
+	      strokeDashoffset: { '50%': '-66%' }
 	    };
 
-	    var tr1 = new mojs.Transit(o);
-	    tr1.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    var shape1 = new mojs.Transit(o);
+	    shape1.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    o.stroke = 'hotpink';
+	    o.stroke = _colors2.default.HOTPINK;
 	    o.strokeDasharray = { '30% 120%': '0% 120%' };
 	    o.strokeDashoffset = { '42%': '-76%' };
 	    o.angle = { '-80': '-60' };
 	    o.delay = 75;
-	    var tr2 = new mojs.Transit(o);
-	    tr2.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    var shape2 = new mojs.Transit(o);
+	    shape2.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    o.stroke = 'yellow';
+	    o.stroke = _colors2.default.YELLOW;
 	    o.strokeDashoffset = { '42%': '-86%' };
 	    o.angle = { '-90': '-60' };
 	    o.delay = 150;
-	    var tr3 = new mojs.Transit(o);
-	    tr3.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    var shape3 = new mojs.Transit(o);
+	    shape3.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    timeline.add(tr1, tr2, tr3);
-	    return timeline;
+	    return [shape1, shape2, shape3];
 	  };
 
 	  return TriangleLines;
-	}();
+	}(_module2.default);
 
 	exports.default = TriangleLines;
 
@@ -9419,72 +9430,75 @@
 
 	var _whiteTriangles2 = _interopRequireDefault(_whiteTriangles);
 
+	var _colors = __webpack_require__(159);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Triangles = function (_Module) {
 	  (0, _inherits3.default)(Triangles, _Module);
 
-	  function Triangles(o) {
-	    var _ret;
-
+	  function Triangles() {
 	    (0, _classCallCheck3.default)(this, Triangles);
-
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
-
-	    return _ret = _this.timeline, (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
+
 	  /*
 	    Method for initial module's render.
 	    @private
 	  */
 
-
 	  Triangles.prototype._render = function _render() {
 	    _Module.prototype._render.call(this);
-	    var blackBg = document.querySelector('#js-black-bg');
-	    this.timeline = new mojs.Timeline();
 
-	    var o = {
+	    return new mojs.Timeline().add(this._triangles(this.el), new _triangleLines2.default({ delay: 100 }));
+	  };
+	  /*
+	    Method to add bright triangles and append white triangles scene.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
+
+
+	  Triangles.prototype._triangles = function _triangles(parent) {
+	    var blendMode = 'screen',
+	        o = {
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
 	      duration: 800,
 	      radius: 65,
 	      angle: { '-120': '-40' },
-	      fill: 'cyan',
-	      // scale:   { 0: 1 },
+	      fill: _colors2.default.CYAN,
 	      x: { '-200': 20 },
 	      y: { '50': -20 },
-	      radiusX: { 0: 85 },
-	      parent: this.el,
+	      scaleX: { 0: 1.3 },
+	      parent: parent,
 	      isShowEnd: false
 	    },
-	        thenO = { x: 0, y: 0, duration: 300, angle: -60, radiusX: 65 };
+	        thenO = { x: 0, y: 0, duration: 300, angle: -60, scaleX: 1 };
 
 	    var tr1 = new mojs.Transit(o).then(thenO);
-	    tr1.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    tr1.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    o.fill = 'hotpink';
+	    o.fill = _colors2.default.HOTPINK;
 	    o.angle = { '-180': '-20' };
 	    o.y = { '30': '-30' };
 	    o.delay = 75;
-	    o.radiusX = { 0: 95 };
+	    o.scaleX = { 0: 1.46 };
 	    var tr2 = new mojs.Transit(o).then(thenO);
-	    tr2.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    tr2.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    o.fill = 'yellow';
+	    o.fill = _colors2.default.YELLOW;
 	    o.angle = { '-220': '-10' };
 	    o.y = { '60': '-50' };
 	    o.delay = 150;
-	    o.radiusX = { 0: 85 };
+	    o.scaleX = { 0: 1.3 };
 	    var tr3 = new mojs.Transit(o).then(thenO);
-	    tr3.wrapperEl.style['mix-blend-mode'] = 'screen';
+	    tr3.wrapperEl.style['mix-blend-mode'] = blendMode;
 
-	    var tm1 = new mojs.Timeline({ delay: 0 });
-
-	    tm1.add(tr1, tr2, tr3);
-	    tm1.append(new _whiteTriangles2.default());
-
-	    this.timeline.add(new _triangleLines2.default({ delay: 100 }), tm1);
+	    return new mojs.Timeline().add(tr1, tr2, tr3).append(new _whiteTriangles2.default());
 	  };
 
 	  return Triangles;
@@ -9516,62 +9530,121 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
+	var _colors = __webpack_require__(159);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var WhiteTriangles = function (_Module) {
 	  (0, _inherits3.default)(WhiteTriangles, _Module);
 
-	  function WhiteTriangles(o) {
-	    var _ret;
-
+	  function WhiteTriangles() {
 	    (0, _classCallCheck3.default)(this, WhiteTriangles);
-
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
-
-	    return _ret = _this.timeline, (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
+
 	  /*
 	    Method for initial module's render.
 	    @private
 	  */
 
-
 	  WhiteTriangles.prototype._render = function _render() {
+	    var _this2 = this;
+
 	    _Module.prototype._render.call(this);
-	    var blackBg = document.querySelector('#js-black-bg');
-	    this.timeline = new mojs.Timeline({
-	      onStart: function onStart(isForward) {
-	        isForward && (blackBg.style.opacity = 1);
+
+	    var blackBg = document.querySelector('#js-black-bg'),
+	        timeline = new mojs.Timeline({
+	      delay: this._props.delay,
+	      onStart: function onStart(isFwd) {
+	        _this2._toggleOpacity(blackBg, isFwd);
 	      },
-	      onComplete: function onComplete(isForward) {
-	        isForward && (blackBg.style.opacity = 0);
+	      onComplete: function onComplete(isFwd) {
+	        _this2._toggleOpacity(blackBg, !isFwd);
 	      }
 	    });
 
+	    blackBg.style['background'] = _colors2.default.BLACK;
+
+	    return timeline.add(this._static(blackBg), this._triangles(blackBg));
+	  };
+	  /*
+	    Method to add white triangles.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Object} Static triangle object.
+	  */
+
+
+	  WhiteTriangles.prototype._static = function _static(parent) {
 	    // the static one
-	    var tr1 = new mojs.Transit({
+	    return new mojs.Transit({
+	      parent: parent,
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
 	      duration: 2000,
 	      radius: { 60: 65 },
 	      angle: -60,
 	      fill: 'none',
-	      stroke: 'white',
+	      stroke: _colors2.default.WHITE,
 	      strokeWidth: { 30: 5 },
 	      easing: 'cubic.out',
 	      isShowEnd: false
 	    });
+	  };
+	  /*
+	    Method to add white triangles.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
 
+
+	  WhiteTriangles.prototype._triangles = function _triangles(parent) {
+	    var opts = {
+	      parent: parent,
+	      left: '50%', top: '50%',
+	      shape: 'polygon',
+	      duration: 2000,
+	      radius: { 85: 125 },
+	      angle: -60,
+	      fill: 'none',
+	      stroke: _colors2.default.WHITE,
+	      strokeWidth: { 7: 0 },
+	      easing: 'cubic.out',
+	      delay: 100,
+	      isShowEnd: false
+	    };
+	    var shape3 = new mojs.Transit(opts);
+
+	    opts.strokeWidth = { 4: 0 };
+	    opts.duration = 1400;
+	    opts.radius = { 85: 95 };
+	    var shape3_1 = new mojs.Transit(opts);
+
+	    return [this._smallTriangles(parent), shape3, shape3_1];
+	  };
+	  /*
+	    Method to add small white triangles.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
+
+
+	  WhiteTriangles.prototype._smallTriangles = function _smallTriangles(parent) {
 	    var shift1 = 87,
 	        shift2 = 50,
 	        opts = {
+	      parent: parent,
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
 	      duration: 2000,
 	      radius: 14,
 	      angle: -60,
 	      fill: 'none',
-	      stroke: 'white',
+	      stroke: _colors2.default.WHITE,
 	      strokeWidth: { 14: 4 },
 	      easing: 'expo.out',
 	      isShowEnd: false
@@ -9579,44 +9652,17 @@
 
 	    opts.x = { 0: -shift1 };
 	    opts.y = { 0: -shift2 };
-	    var tr2_1 = new mojs.Transit(opts);
+	    var shape2_1 = new mojs.Transit(opts);
 
 	    opts.x = { 0: shift1 };
 	    opts.y = { 0: -shift2 };
-	    var tr2_2 = new mojs.Transit(opts);
+	    var shape2_2 = new mojs.Transit(opts);
 
 	    opts.x = 0;
 	    opts.y = { 0: 1.15 * shift1 };
-	    var tr2_3 = new mojs.Transit(opts);
+	    var shape2_3 = new mojs.Transit(opts);
 
-	    var tr3 = new mojs.Transit({
-	      left: '50%', top: '50%',
-	      shape: 'polygon',
-	      duration: 2000,
-	      radius: { 85: 125 },
-	      angle: -60,
-	      fill: 'none',
-	      stroke: 'white',
-	      strokeWidth: { 7: 0 },
-	      easing: 'cubic.out',
-	      delay: 100,
-	      isShowEnd: false
-	    });
-
-	    var tr3_1 = new mojs.Transit({
-	      left: '50%', top: '50%',
-	      shape: 'polygon',
-	      duration: 1400,
-	      radius: { 85: 95 },
-	      angle: -60,
-	      fill: 'none',
-	      stroke: 'white',
-	      strokeWidth: { 4: 0 },
-	      easing: 'cubic.out',
-	      isShowEnd: false
-	    });
-
-	    this.timeline.add(tr1, tr2_1, tr2_2, tr2_3, tr3, tr3_1);
+	    return [shape2_1, shape2_2, shape2_3];
 	  };
 
 	  return WhiteTriangles;
@@ -9648,45 +9694,46 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
+	var _colors = __webpack_require__(159);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var GreenScene = function (_Module) {
 	  (0, _inherits3.default)(GreenScene, _Module);
 
-	  function GreenScene(o) {
-	    var _ret;
-
+	  function GreenScene() {
 	    (0, _classCallCheck3.default)(this, GreenScene);
-
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
-
-	    return _ret = _this.timeline, (0, _possibleConstructorReturn3.default)(_this, _ret);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
+
 	  /*
 	    Method for initial module's render.
 	    @private
 	  */
 
-
 	  GreenScene.prototype._render = function _render() {
+	    var _this2 = this;
+
 	    _Module.prototype._render.call(this);
-	    var greenBg = document.querySelector('#js-green-bg');
-	    this.timeline = new mojs.Timeline({
-	      delay: 2700,
-	      onStart: function onStart(isForward) {
-	        isForward && (greenBg.style.opacity = 1);
-	        !isForward && (greenBg.style.opacity = 0);
+	    var greenBg = document.querySelector('#js-green-bg'),
+	        timeline = new mojs.Timeline({
+	      delay: this._props.delay,
+	      onStart: function onStart(isFwd) {
+	        _this2._toggleOpacity(greenBg, isFwd);
 	      },
-	      onComplete: function onComplete(isForward) {
-	        isForward && (greenBg.style.opacity = 0);
-	        !isForward && (greenBg.style.opacity = 1);
+	      onComplete: function onComplete(isFwd) {
+	        _this2._toggleOpacity(greenBg, !isFwd);
 	      }
 	    });
+
+	    greenBg.style['background'] = _colors2.default.GREEN;
 
 	    var pinkSquare = new mojs.Transit({
 	      left: '50%', top: '50%',
 	      shape: 'rect',
-	      stroke: 'hotpink',
+	      stroke: _colors2.default.HOTPINK,
 	      strokeWidth: 50,
 	      angle: { '-240': 0 },
 	      radius: 25,
@@ -9717,12 +9764,17 @@
 	      strokeDashoffset: { '-75%': '-100%' }
 	    };
 
-	    this.timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare), this._addTrail3(pinkSquare), this._addTrail4(pinkSquare));
+	    return timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare), this._addTrail3(pinkSquare), this._addTrail4(pinkSquare));
 	  };
+	  /*
+	    Method to add trail.
+	    @private
+	    @returns {Array(Object)} Array of `Transits`.
+	  */
+
 
 	  GreenScene.prototype._addTrail1 = function _addTrail1(pinkSquare) {
-	    var tm = new mojs.Timeline(),
-	        trail1 = new mojs.Transit(this.trailOpts);
+	    var trail1 = new mojs.Transit(this.trailOpts);
 
 	    this.trailOpts.angle = -150;
 	    this.trailOpts.top = '14%';
@@ -9739,12 +9791,16 @@
 	    this.trailOpts.radiusX = 7;
 	    var trail3 = new mojs.Transit(this.trailOpts);
 
-	    return tm.add(trail1, trail2, trail3);
+	    return [trail1, trail2, trail3];
 	  };
+	  /*
+	    Method to add trail.
+	    @private
+	    @returns {Array(Object)} Array of `Transits`.
+	  */
+
 
 	  GreenScene.prototype._addTrail2 = function _addTrail2(pinkSquare) {
-	    var tm = new mojs.Timeline();
-
 	    this.trailOpts.left = '78%';
 	    this.trailOpts.top = '40%';
 	    this.trailOpts.radius = 22;
@@ -9766,12 +9822,16 @@
 	    this.trailOpts.radiusX = 8;
 	    var trail3 = new mojs.Transit(this.trailOpts);
 
-	    return tm.add(trail1, trail2, trail3);
+	    return [trail1, trail2, trail3];
 	  };
+	  /*
+	    Method to add trail.
+	    @private
+	    @returns {Array(Object)} Array of `Transits`.
+	  */
+
 
 	  GreenScene.prototype._addTrail3 = function _addTrail3(pinkSquare) {
-	    var tm = new mojs.Timeline();
-
 	    this.trailOpts.left = '59%';
 	    this.trailOpts.top = '81%';
 	    this.trailOpts.radius = 18;
@@ -9794,12 +9854,16 @@
 	    this.trailOpts.radiusX = 8;
 	    var trail3 = new mojs.Transit(this.trailOpts);
 
-	    return tm.add(trail1, trail2, trail3);
+	    return [trail1, trail2, trail3];
 	  };
+	  /*
+	    Method to add trail.
+	    @private
+	    @returns {Array(Object)} Array of `Transits`.
+	  */
+
 
 	  GreenScene.prototype._addTrail4 = function _addTrail4(pinkSquare) {
-	    var tm = new mojs.Timeline();
-
 	    this.trailOpts.left = '17%';
 	    this.trailOpts.top = '60%';
 	    this.trailOpts.radius = 20;
@@ -9822,7 +9886,7 @@
 	    this.trailOpts.radiusX = 10;
 	    var trail3 = new mojs.Transit(this.trailOpts);
 
-	    return tm.add(trail1, trail2, trail3);
+	    return [trail1, trail2, trail3];
 	  };
 
 	  return GreenScene;
@@ -9880,7 +9944,7 @@
 
 	    var pinkBg = this._findEl('#js-pink-bg'),
 	        timeline = new mojs.Timeline({
-	      delay: 4000,
+	      delay: this._props.delay,
 	      onStart: function onStart(isFwd) {
 	        _this2._toggleOpacity(pinkBg, isFwd);
 	      },
@@ -9925,6 +9989,8 @@
 	      duration: 800
 	    });
 
+	    // circle1.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+
 	    opts.fill = _colors2.default.PINK;
 	    opts.scale = { 0: 2.25 };
 	    opts.duration = 700;
@@ -9935,11 +10001,15 @@
 	      duration: 700
 	    });
 
+	    // circle2.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+
 	    opts.fill = _colors2.default.GREY;
 	    opts.scale = { 0: scale };
 	    opts.duration = 1000;
 	    opts.delay = 2000;
 	    var circle3 = new mojs.Transit(opts);
+
+	    // circle3.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
 
 	    return [circle1, circle2, circle3];
 	  };
@@ -10043,6 +10113,9 @@
 	exports.__esModule = true;
 
 	var COLORS = {
+	  WHITE: '#ffffff',
+	  BLACK: '#000000',
+	  GREEN: '#74CBA0',
 	  PINK: '#E9BDAB',
 	  GREY: '#555555',
 	  CYAN: 'cyan',

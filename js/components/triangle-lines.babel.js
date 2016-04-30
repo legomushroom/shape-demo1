@@ -1,49 +1,50 @@
+import Module from './module';
+import COLORS from './colors';
+const { Timeline } = mojs;
 
-class TriangleLines {
-  constructor(o={}) {
-    this._o = o;
-    return this._render();
-  }
+class TriangleLines extends Module {
   /*
     Method for initial module's render.
     @private
   */
   _render () {
-    let timeline = new mojs.Timeline({ delay: this._o.delay || 0 }),
-        o = {
-          left: '50%', top: '50%',
-          shape:    'polygon',
-          duration: 1200,
-          radius:   { 150 : 100 },
-          angle:    { '-70': '-60' },
-          fill:     'none',
-          stroke:   'cyan',
-          strokeDasharray: {'50% 100%' : '0% 100%'} , 
+    return ( new Timeline({ delay: this._props.delay }) ).add( this._lines() );
+  }
+
+  _lines () {
+    let blendMode = 'screen',
+        o         = {
+          left:         '50%', top: '50%',
+          shape:        'polygon',
+          duration:     1200,
+          radius:       { 150 : 100 },
+          angle:        { '-70': '-60' },
+          fill:         'none',
+          stroke:       COLORS.CYAN,
+          strokeWidth:  3,
+          strokeDasharray:  {'50% 100%' : '0% 100%'} , 
           strokeDashoffset: { '50%' : '-66%' },
-          strokeWidth: 3,
         };
 
-    let tr1 = new mojs.Transit(o);
-    tr1.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
+    let shape1 = new mojs.Transit(o);
+    shape1.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
 
-    o.stroke           = 'hotpink'; 
+    o.stroke           = COLORS.HOTPINK; 
     o.strokeDasharray  = {'30% 120%' : '0% 120%'}; 
     o.strokeDashoffset = { '42%' : '-76%' }; 
     o.angle            = { '-80': '-60' };
     o.delay            = 75;
-    let tr2 = new mojs.Transit(o);
-    tr2.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
+    let shape2 = new mojs.Transit(o);
+    shape2.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
 
-    o.stroke           = 'yellow'; 
+    o.stroke           = COLORS.YELLOW; 
     o.strokeDashoffset = { '42%' : '-86%' }; 
     o.angle            = { '-90': '-60' };
     o.delay            = 150;
-    let tr3 = new mojs.Transit(o);
-    tr3.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
+    let shape3  = new mojs.Transit(o);
+    shape3.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
 
-
-    timeline.add( tr1, tr2, tr3 );
-    return timeline;
+    return [ shape1, shape2, shape3 ];
   }
 }
 

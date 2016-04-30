@@ -22,9 +22,7 @@ class Module {
     this._defaults = {
       className:  '',
       parent:     document.body,
-      isPrepend:  false,
-      isRipple:   false,
-      prefix:     ''
+      delay:      0,
     };
   }
   /*
