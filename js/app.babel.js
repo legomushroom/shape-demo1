@@ -4,6 +4,7 @@ import Module         from './components/module';
 import TriangleLines  from './components/triangle-lines';
 import Triangles      from './components/triangles';
 import GreenScene     from './components/green-scene';
+import Circle         from './components/circle';
 
 // require('css/blocks/mojs-player.postcss.css');
 // let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
@@ -15,9 +16,10 @@ class Demo extends Module {
     @private
   */
   _render () {
-    this.mainTimeline = new mojs.Timeline();
+    this.mainTimeline = new mojs.Timeline({ repeat: 0 });
     this.mainTimeline.add( new Triangles );
     this.mainTimeline.add( new GreenScene );
+    this.mainTimeline.add( new Circle );
 
     this.player = new MojsPlayer({
       add: this.mainTimeline,

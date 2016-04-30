@@ -15,8 +15,6 @@ class Triangles extends Module {
     super._render();
     let blackBg = document.querySelector('#js-black-bg');
     this.timeline = new mojs.Timeline();
-
-    // this.el.style[ 'mix-blend-mode' ] = 'screen'
     
     let o = {
       left: '50%', top: '50%',
@@ -35,8 +33,7 @@ class Triangles extends Module {
     thenO = { x: 0, y: 0, duration: 300, angle: -60, radiusX: 65 };
 
     let tr1 = new mojs.Transit(o).then(thenO);
-    tr1.el.style[ 'mix-blend-mode' ] = 'screen';
-    tr1._modules[1].el.style[ 'mix-blend-mode' ] = 'screen';
+    tr1.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
     o.fill           = 'hotpink'; 
     o.angle            = { '-180': '-20' };
@@ -44,8 +41,7 @@ class Triangles extends Module {
     o.delay            = 75;
     o.radiusX          = { 0 : 95 };
     let tr2 = new mojs.Transit(o).then(thenO);
-    tr2.el.style[ 'mix-blend-mode' ] = 'screen';
-    tr2._modules[1].el.style[ 'mix-blend-mode' ] = 'screen';
+    tr2.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
     o.fill           = 'yellow'; 
     o.angle            = { '-220': '-10' };
@@ -53,8 +49,7 @@ class Triangles extends Module {
     o.delay            = 150;
     o.radiusX          = { 0 : 85 };
     let tr3 = new mojs.Transit(o).then(thenO);
-    tr3.el.style[ 'mix-blend-mode' ] = 'screen';
-    tr3._modules[1].el.style[ 'mix-blend-mode' ] = 'screen';
+    tr3.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
     let tm1 = new mojs.Timeline({ delay: 0 });
 

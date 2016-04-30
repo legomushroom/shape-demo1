@@ -24,7 +24,7 @@ class TriangleLines {
         };
 
     let tr1 = new mojs.Transit(o);
-    tr1.el.style[ 'mix-blend-mode' ] = 'screen';
+    tr1.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
     o.stroke           = 'hotpink'; 
     o.strokeDasharray  = {'30% 120%' : '0% 120%'}; 
@@ -32,14 +32,14 @@ class TriangleLines {
     o.angle            = { '-80': '-60' };
     o.delay            = 75;
     let tr2 = new mojs.Transit(o);
-    tr2.el.style[ 'mix-blend-mode' ] = 'screen';
+    tr2.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
     o.stroke           = 'yellow'; 
     o.strokeDashoffset = { '42%' : '-86%' }; 
     o.angle            = { '-90': '-60' };
     o.delay            = 150;
     let tr3 = new mojs.Transit(o);
-    tr3.el.style[ 'mix-blend-mode' ] = 'screen';
+    tr3.wrapperEl.style[ 'mix-blend-mode' ] = 'screen';
 
 
     timeline.add( tr1, tr2, tr3 );

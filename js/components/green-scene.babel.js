@@ -15,12 +15,12 @@ class GreenScene extends Module {
     this.timeline = new mojs.Timeline({
       delay: 2700,
       onStart: function (isForward) {
-        // console.log('start', this._props.name, isForward);
         isForward && (greenBg.style.opacity = 1);
+        !isForward && (greenBg.style.opacity = 0);
       },
       onComplete: function (isForward) {
         isForward && (greenBg.style.opacity = 0);
-        // console.log('comple', this._props.name, isForward);
+        !isForward && (greenBg.style.opacity = 1);
       }
     });
 
@@ -32,26 +32,30 @@ class GreenScene extends Module {
       angle: { '-240': 0 },
       radius: 25,
       scale: { 0 : 2 },
-      duration: 1800,
+      duration: 1500,
       fill: 'none',
       easing: 'expo.out',
       parent: greenBg,
-    }).then({ strokeWidth: 0 });
+    }).then({ strokeWidth: 3, duration: 600, easing: 'cubic.out', radius: 25 });
+
+    pinkSquare.wrapperEl.style[ 'height' ] = '100%';
+    pinkSquare.wrapperEl.style[ 'position' ] = 'relative';
 
     this.trailOpts = {
-      left: '40%', top: '23%',
-      shape: 'circle',
-      stroke: 'white',
-      strokeWidth: { 5 : 0 },
-      fill: 'none',
-      radius: 25,
-      radiusX: 20,
-      angle: -90,
+      left:         '40%', top: '23%',
+      shape:        'circle',
+      stroke:       'white',
+      strokeWidth:  { 5 : 0 },
+      fill:         'none',
+      radius:       25,
+      radiusX:      20,
+      angle:       -90,
+      duration:     1250,
+      delay:        200,
+      parent:       pinkSquare.el,
+      strokeLinecap: 'round',
       strokeDasharray: '20% 300%',
       strokeDashoffset: {'-75%': '-100%'},
-      duration: 1250,
-      delay: 200,
-      parent: pinkSquare.el
     }
     
     this.timeline.add(

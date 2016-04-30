@@ -12,7 +12,7 @@ class Module {
     this._declareDefaults();
     this._extendDefaults();
     this._vars()
-    this._render();
+    return this._render();
   }
   /*
     Method to declare defaults.
@@ -186,6 +186,24 @@ class Module {
     @param {Object} Child HTMLElement.
   */
   _prependChild ( el, childEl ) { el.insertBefore(childEl, el.firstChild); }
+  /*
+    Method to toggle opacity based on passed boolean.
+    @private
+    @param {Object} HTML element.
+    @param {Boolean} Show/hide element.
+  */
+  _toggleOpacity ( el, isShow ) {
+    el.style.opacity = ( isShow ) ? 1 : 0;
+  }
+  /*
+    Method to find an element on the page by selector.
+    @private
+    @param {String} Selector.
+    @returns {Object, Null} `Html` element or `null`.
+  */
+  _findEl ( selector ) {
+    return document.querySelector( selector );
+  }
 }
 
 export default Module;

@@ -91,6 +91,10 @@
 
 	var _greenScene2 = _interopRequireDefault(_greenScene);
 
+	var _circle = __webpack_require__(158);
+
+	var _circle2 = _interopRequireDefault(_circle);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// require('css/blocks/mojs-player.postcss.css');
@@ -110,9 +114,10 @@
 	  */
 
 	  Demo.prototype._render = function _render() {
-	    this.mainTimeline = new mojs.Timeline();
+	    this.mainTimeline = new mojs.Timeline({ repeat: 0 });
 	    this.mainTimeline.add(new _triangles2.default());
 	    this.mainTimeline.add(new _greenScene2.default());
+	    this.mainTimeline.add(new _circle2.default());
 
 	    this.player = new _mojsPlayer2.default({
 	      add: this.mainTimeline,
@@ -1782,7 +1787,7 @@
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! 
 		:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 		Oleg Solomka @LegoMushroom 2016 MIT
-		0.40.0 
+		0.40.3 
 	*/
 
 	'use strict';
@@ -1876,7 +1881,7 @@
 	    this._defaults.isHidden = false;
 
 	    var str = 'mojs-player';
-	    this.revision = '0.40.0';
+	    this.revision = '0.40.3';
 	    this._prefix = str + '-' + this._hashCode(str) + '-';
 	    this._localStorage = this._prefix + 'model';
 	  };
@@ -2145,21 +2150,58 @@
 
 	  MojsPlayer.prototype._onSysProgress = function _onSysProgress(p) {
 	    this.playerSlider.setTrackProgress(p);
+
 	    var rightBound = this._props.isBounds ? this._props.rightBound : 1,
 	        leftBound = this._props.isBounds ? this._props.leftBound : -1;
 
-	    if (p < leftBound && p !== 0) {
-	      this._sysTween.pause();
-	      this._defer(this._play);
+	    // since js is really bed in numbers precision,
+	    // if we set a progress in the `_play` method it returns slighly
+	    // different when piped thru tween, so add `0.01` gap to soften that
+	    if (p < leftBound - 0.01 && p !== 0) {
+	      this._reset();
+	      requestAnimationFrame(this._play.bind(this));
 	    }
+
 	    if (p >= rightBound) {
-	      this._sysTween.pause();
+	      this._reset();
 	      if (this._props.isRepeat) {
-	        this._defer(this._play);
+	        requestAnimationFrame(this._play.bind(this));
 	      } else {
 	        this._props.isPlaying = false;
 	      }
 	    }
+	  };
+	  /*
+	    Method to play system tween from progress.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._play = function _play() {
+	    var p = this._props,
+	        leftBound = p.isBounds ? p.leftBound : p.progress,
+	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
+
+	    if (progress === 1) {
+	      progress = p.isBounds ? p.leftBound : 0;
+	    };
+	    if (progress !== 0) {
+	      this._sysTween.setProgress(progress);
+	    };
+
+	    this._sysTween.play();
+	  };
+	  /*
+	    Method to reset sysTween and timeline.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._reset = function _reset() {
+	    requestAnimationFrame( function () {
+	      this._sysTween.reset();
+	      this.timeline.reset();
+	    }.bind( this ) );
 	  };
 	  /*
 	    Method to set play button state.
@@ -2174,7 +2216,7 @@
 	    clearTimeout(this._playTimeout);
 	    this._playTimeout = setTimeout(function () {
 	      _this4.playButton && _this4.playButton[method](false);
-	    }, 2);
+	    }, 20);
 	  };
 	  /*
 	    Method that is invoked on system tween completion.
@@ -2183,20 +2225,22 @@
 	  */
 
 
-	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {
-	    if (this._props.isPlaying && isForward) {
-	      if (this._props.isRepeat) {
-	        this._sysTween.replay();
-	        // this._play();
-	      }
-	    }
-	  };
+	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {}
+	  // console.log(' complete ', this._props.isPlaying, isForward, this._props.isRepeat);
+	  // if ( this._props.isPlaying && isForward ) {
+	  //   if ( this._props.isRepeat ) {
+	  //     console.log('reset 2')
+	  //     // this._sysTween.reset();
+	  //     // this._play();
+	  //   }
+	  // }
+
 	  /*
 	    Method that is invoked play button state change.
 	    @private
 	    @param {Boolean} Repeat button state.
 	  */
-
+	  ;
 
 	  MojsPlayer.prototype._onPlayStateChange = function _onPlayStateChange(isPlay) {
 	    this._props.isPlaying = isPlay;
@@ -2223,19 +2267,6 @@
 	    }
 	  };
 	  /*
-	    Method to play system tween from progress.
-	    @private
-	  */
-
-
-	  MojsPlayer.prototype._play = function _play() {
-	    var p = this._props,
-	        leftBound = p.isBounds ? p.leftBound : p.progress,
-	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
-
-	    this._sysTween.setProgress(progress).setSpeed(p.speed).play();
-	  };
-	  /*
 	    Method that is invoked on stop button tap.
 	    @private
 	  */
@@ -2243,8 +2274,7 @@
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
 	    this._props.isPlaying = false;
-	    // this.playButton.off();
-	    this._sysTween.stop();
+	    this._reset();
 	  };
 	  /*
 	    Method that is invoked on repeat switch state change.
@@ -2310,8 +2340,15 @@
 
 	  MojsPlayer.prototype._onProgress = function _onProgress(progress) {
 	    this._props.progress = progress;
-	    if (!this.timeline._prevTime) {
-	      this.timeline.setProgress(0);
+	    // if timeline was reset - refresh it's state
+	    // by incremental updates until progress (0 always)
+	    if (!this.timeline._prevTime && progress > 0) {
+	      var start = 0,
+	          step = 0.1;
+	      do {
+	        this.timeline.setProgress(start);
+	        start += step;
+	      } while (start + step < progress);
 	    }
 	    this.timeline.setProgress(progress);
 	  };
@@ -2904,7 +2941,9 @@
 	      isBound: true,
 	      parent: this.el,
 	      isRipple: false,
-	      onProgress: this._onLeftBoundProgress.bind(this)
+	      onProgress: this._onLeftBoundProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd
 	    });
 
 	    this.track = new _slider2.default({
@@ -2919,7 +2958,9 @@
 	      parent: this.el,
 	      isRipple: false,
 	      isInversed: true,
-	      onProgress: this._onRightBoundProgress.bind(this)
+	      onProgress: this._onRightBoundProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd
 	    });
 
 	    this.rightBound.setProgress(p.rightProgress);
@@ -2949,6 +2990,7 @@
 	    if (!this._props.isBounds) {
 	      return;
 	    }
+	    this._props.leftProgress = p;
 	    this.track.setMinBound(p);
 	    this.rightBound.setMinBound(p);
 	    this._callIfFunction(this._props.onLeftProgress, p);
@@ -2964,6 +3006,7 @@
 	    if (!this._props.isBounds) {
 	      return;
 	    }
+	    this._props.rightProgress = p;
 	    this.track.setMaxBound(p);
 	    this.leftBound.setMaxBound(p);
 	    this._callIfFunction(this._props.onRightProgress, p);
@@ -6831,24 +6874,19 @@
 
 
 	  Ripple.prototype._addRipple = function _addRipple() {
-	    var _ref;
+	    var _this2 = this,
+	        _ref;
 
 	    this.transit = new mojs.Transit((_ref = {
 	      parent: this.el,
 	      strokeWidth: { 10: 0 },
 	      fill: 'none',
-	      // stroke:       'white',
 	      stroke: 'hotpink'
-	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .85: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = this._onStart.bind(this), _ref.onUpdate = this._onUpdate.bind(this), _ref));
-	  };
-	  /*
-	    Method that is invoked on ripple start.
-	    @private
-	  */
-
-
-	  Ripple.prototype._onStart = function _onStart() {
-	    this.isStart = true;
+	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .85: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
+	      _this2.isStart = true;
+	    }, _ref.onUpdate = this._onUpdate.bind(this), _ref.onComplete = function onComplete() {
+	      _this2.isStart = false;
+	    }, _ref));
 	  };
 	  /*
 	    Method that is invoked on ripple update.
@@ -6873,6 +6911,7 @@
 
 
 	  Ripple.prototype._release = function _release() {
+	    // console.log('release');
 	    if (!this._props.withHold) {
 	      return;
 	    }
@@ -9022,7 +9061,7 @@
 	    this._declareDefaults();
 	    this._extendDefaults();
 	    this._vars();
-	    this._render();
+	    return this._render();
 	  }
 	  /*
 	    Method to declare defaults.
@@ -9250,6 +9289,28 @@
 	  Module.prototype._prependChild = function _prependChild(el, childEl) {
 	    el.insertBefore(childEl, el.firstChild);
 	  };
+	  /*
+	    Method to toggle opacity based on passed boolean.
+	    @private
+	    @param {Object} HTML element.
+	    @param {Boolean} Show/hide element.
+	  */
+
+
+	  Module.prototype._toggleOpacity = function _toggleOpacity(el, isShow) {
+	    el.style.opacity = isShow ? 1 : 0;
+	  };
+	  /*
+	    Method to find an element on the page by selector.
+	    @private
+	    @param {String} Selector.
+	    @returns {Object, Null} `Html` element or `null`.
+	  */
+
+
+	  Module.prototype._findEl = function _findEl(selector) {
+	    return document.querySelector(selector);
+	  };
 
 	  return Module;
 	}();
@@ -9300,7 +9361,7 @@
 	    };
 
 	    var tr1 = new mojs.Transit(o);
-	    tr1.el.style['mix-blend-mode'] = 'screen';
+	    tr1.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    o.stroke = 'hotpink';
 	    o.strokeDasharray = { '30% 120%': '0% 120%' };
@@ -9308,14 +9369,14 @@
 	    o.angle = { '-80': '-60' };
 	    o.delay = 75;
 	    var tr2 = new mojs.Transit(o);
-	    tr2.el.style['mix-blend-mode'] = 'screen';
+	    tr2.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    o.stroke = 'yellow';
 	    o.strokeDashoffset = { '42%': '-86%' };
 	    o.angle = { '-90': '-60' };
 	    o.delay = 150;
 	    var tr3 = new mojs.Transit(o);
-	    tr3.el.style['mix-blend-mode'] = 'screen';
+	    tr3.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    timeline.add(tr1, tr2, tr3);
 	    return timeline;
@@ -9383,8 +9444,6 @@
 	    var blackBg = document.querySelector('#js-black-bg');
 	    this.timeline = new mojs.Timeline();
 
-	    // this.el.style[ 'mix-blend-mode' ] = 'screen'
-
 	    var o = {
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
@@ -9402,8 +9461,7 @@
 	        thenO = { x: 0, y: 0, duration: 300, angle: -60, radiusX: 65 };
 
 	    var tr1 = new mojs.Transit(o).then(thenO);
-	    tr1.el.style['mix-blend-mode'] = 'screen';
-	    tr1._modules[1].el.style['mix-blend-mode'] = 'screen';
+	    tr1.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    o.fill = 'hotpink';
 	    o.angle = { '-180': '-20' };
@@ -9411,8 +9469,7 @@
 	    o.delay = 75;
 	    o.radiusX = { 0: 95 };
 	    var tr2 = new mojs.Transit(o).then(thenO);
-	    tr2.el.style['mix-blend-mode'] = 'screen';
-	    tr2._modules[1].el.style['mix-blend-mode'] = 'screen';
+	    tr2.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    o.fill = 'yellow';
 	    o.angle = { '-220': '-10' };
@@ -9420,8 +9477,7 @@
 	    o.delay = 150;
 	    o.radiusX = { 0: 85 };
 	    var tr3 = new mojs.Transit(o).then(thenO);
-	    tr3.el.style['mix-blend-mode'] = 'screen';
-	    tr3._modules[1].el.style['mix-blend-mode'] = 'screen';
+	    tr3.wrapperEl.style['mix-blend-mode'] = 'screen';
 
 	    var tm1 = new mojs.Timeline({ delay: 0 });
 
@@ -9485,12 +9541,10 @@
 	    var blackBg = document.querySelector('#js-black-bg');
 	    this.timeline = new mojs.Timeline({
 	      onStart: function onStart(isForward) {
-	        console.log('start', this._props.name, isForward);
 	        isForward && (blackBg.style.opacity = 1);
 	      },
 	      onComplete: function onComplete(isForward) {
 	        isForward && (blackBg.style.opacity = 0);
-	        console.log('comple', this._props.name, isForward);
 	      }
 	    });
 
@@ -9620,12 +9674,12 @@
 	    this.timeline = new mojs.Timeline({
 	      delay: 2700,
 	      onStart: function onStart(isForward) {
-	        // console.log('start', this._props.name, isForward);
 	        isForward && (greenBg.style.opacity = 1);
+	        !isForward && (greenBg.style.opacity = 0);
 	      },
 	      onComplete: function onComplete(isForward) {
 	        isForward && (greenBg.style.opacity = 0);
-	        // console.log('comple', this._props.name, isForward);
+	        !isForward && (greenBg.style.opacity = 1);
 	      }
 	    });
 
@@ -9637,11 +9691,14 @@
 	      angle: { '-240': 0 },
 	      radius: 25,
 	      scale: { 0: 2 },
-	      duration: 1800,
+	      duration: 1500,
 	      fill: 'none',
 	      easing: 'expo.out',
 	      parent: greenBg
-	    }).then({ strokeWidth: 0 });
+	    }).then({ strokeWidth: 3, duration: 600, easing: 'cubic.out', radius: 25 });
+
+	    pinkSquare.wrapperEl.style['height'] = '100%';
+	    pinkSquare.wrapperEl.style['position'] = 'relative';
 
 	    this.trailOpts = {
 	      left: '40%', top: '23%',
@@ -9652,11 +9709,12 @@
 	      radius: 25,
 	      radiusX: 20,
 	      angle: -90,
-	      strokeDasharray: '20% 300%',
-	      strokeDashoffset: { '-75%': '-100%' },
 	      duration: 1250,
 	      delay: 200,
-	      parent: pinkSquare.el
+	      parent: pinkSquare.el,
+	      strokeLinecap: 'round',
+	      strokeDasharray: '20% 300%',
+	      strokeDashoffset: { '-75%': '-100%' }
 	    };
 
 	    this.timeline.add(pinkSquare, this._addTrail1(pinkSquare), this._addTrail2(pinkSquare), this._addTrail3(pinkSquare), this._addTrail4(pinkSquare));
@@ -9771,6 +9829,228 @@
 	}(_module2.default);
 
 	exports.default = GreenScene;
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(153);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _colors = __webpack_require__(159);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Circle = function (_Module) {
+	  (0, _inherits3.default)(Circle, _Module);
+
+	  function Circle() {
+	    (0, _classCallCheck3.default)(this, Circle);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method for initial module's render.
+	    @private
+	  */
+
+	  Circle.prototype._render = function _render() {
+	    var _this2 = this;
+
+	    _Module.prototype._render.call(this);
+
+	    var pinkBg = this._findEl('#js-pink-bg'),
+	        timeline = new mojs.Timeline({
+	      delay: 4000,
+	      onStart: function onStart(isFwd) {
+	        _this2._toggleOpacity(pinkBg, isFwd);
+	      },
+	      onComplete: function onComplete(isFwd) {
+	        _this2._toggleOpacity(pinkBg, !isFwd);
+	      }
+	    });
+
+	    pinkBg.style['background'] = _colors2.default.PINK;
+
+	    return timeline.add(this._scaleCircles(pinkBg)).add(this._triangles(pinkBg)).add(this._lines(pinkBg));
+	  };
+	  /*
+	    Method to add the main scale circles to the scene.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
+
+
+	  Circle.prototype._scaleCircles = function _scaleCircles(parent) {
+	    var circleSize = 25,
+	        scale = this._calcScale(circleSize),
+	        opts = {
+	      parent: parent,
+	      left: '50%', top: '50%',
+	      radius: circleSize,
+	      fill: '#555',
+	      scale: { 1: 4 },
+	      isShowEnd: false,
+	      duration: 800,
+	      easing: 'cubic.out'
+	    };
+
+	    var circle1 = new mojs.Transit(opts).then({
+	      easing: 'cubic.inout',
+	      scale: 2.5,
+	      duration: 600
+	    }).then({
+	      easing: 'cubic.inout',
+	      scale: scale,
+	      duration: 800
+	    });
+
+	    opts.fill = _colors2.default.PINK;
+	    opts.scale = { 0: 2.25 };
+	    opts.duration = 700;
+	    opts.delay = 1000;
+	    var circle2 = new mojs.Transit(opts).then({
+	      easing: 'cubic.inout',
+	      scale: scale,
+	      duration: 700
+	    });
+
+	    opts.fill = _colors2.default.GREY;
+	    opts.scale = { 0: scale };
+	    opts.duration = 1000;
+	    opts.delay = 2000;
+	    var circle3 = new mojs.Transit(opts);
+
+	    return [circle1, circle2, circle3];
+	  };
+	  /*
+	    Method to add the lines that are near circle.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
+
+
+	  Circle.prototype._lines = function _lines(parent) {
+	    var lineOpts = {
+	      parent: parent,
+	      shape: 'line',
+	      left: '50%', top: '50%',
+	      x: -180,
+	      radius: 50,
+	      stroke: _colors2.default.GREY,
+	      strokeWidth: { 15: 0 },
+	      duration: 1000,
+	      strokeDasharray: '100% 100%',
+	      strokeDashoffset: { '-100%': '100%' },
+	      easing: 'cubic.out'
+	    };
+	    var line1 = new mojs.Transit(lineOpts);
+
+	    lineOpts.angle = 180;
+	    lineOpts.x = -lineOpts.x;
+	    var line2 = new mojs.Transit(lineOpts);
+
+	    return [line1, line2];
+	  };
+	  /*
+	    Method to add the triangles that are inside circle,
+	    moving toward it's center.
+	    @private
+	    @param {Object} `HTML` element to add the circles to.
+	    @returns {Array(Object)} Array of timelines.
+	  */
+
+
+	  Circle.prototype._triangles = function _triangles(parent) {
+	    var triangleOpts = {
+	      parent: parent,
+	      left: '50%', top: '50%',
+	      shape: 'polygon',
+	      radius: 15,
+	      duration: 700,
+	      fill: _colors2.default.PINK,
+	      y: { 80: -15 },
+	      scale: { 1: 0 },
+	      delay: 850,
+	      easing: 'cubic.out'
+	    };
+	    var triangle1 = new mojs.Transit(triangleOpts);
+
+	    triangleOpts.y = { '-80': 15 };
+	    triangleOpts.angle = 180;
+	    var triangle2 = new mojs.Transit(triangleOpts);
+	    return [triangle1, triangle2];
+	  };
+	  /*
+	    Method to get max window size.
+	    @private
+	    @returns Max window size.
+	  */
+
+
+	  Circle.prototype._getWindowSize = function _getWindowSize() {
+	    var w = window,
+	        width = w.innerWidth || e.clientWidth || g.clientWidth,
+	        height = w.innerHeight || e.clientHeight || g.clientHeight;
+
+	    return Math.max(width, height);
+	  };
+	  /*
+	    Method to scale amount for radius to fill the screen.
+	    @private
+	    @returns Scale size.
+	  */
+
+
+	  Circle.prototype._calcScale = function _calcScale(radius) {
+	    // since it is `radius` not `diameter` - / 2
+	    // since it is a circle - * 1.25 to fill the square screen
+	    return 1.25 * (this._getWindowSize() / radius / 2);
+	  };
+
+	  return Circle;
+	}(_module2.default);
+
+	exports.default = Circle;
+
+/***/ },
+/* 159 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var COLORS = {
+	  PINK: '#E9BDAB',
+	  GREY: '#555555',
+	  CYAN: 'cyan',
+	  YELLOW: 'yellow',
+	  HOTPINK: 'hotpink'
+	};
+
+	exports.default = COLORS;
 
 /***/ }
 /******/ ]);
