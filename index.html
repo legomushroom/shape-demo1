@@ -28,18 +28,72 @@
         position: absolute;
         left:     0;
         top:      0;
-        opacity:  0; 
+        opacity:  0;
       }
 
       .black-background { z-index: 1; }
       .green-background { z-index: 2; }
       .pink-background { z-index: 3; }
+      .pink-background__logo {
+        position:     absolute;
+        left:         50%;
+        top:          50%;
+        z-index:      2;
+        margin-left: -58px;
+        margin-top:  -12px;
+      }
+
+      .logo-char {
+        position:     absolute;
+        top:          0;
+        float:        left;
+        opacity:      0;
+      }
+      /*.logo-char--m { opacity: 1; }*/
+      .logo-char--o { left: 35px; }
+      .logo-char--j { left: 62px; top: -10px; }
+      .logo-char--s { left: 92px; }
 
     </style>
 
     <div id="js-black-bg" class="background black-background"></div>
     <div id="js-green-bg" class="background green-background"></div>
-    <div id="js-pink-bg"  class="background pink-background"></div>
+    <div id="js-pink-bg"  class="background pink-background">
+      <div id="js-logo" class="pink-background__logo">
+
+        <div id="js-logo-m" class="logo-char logo-char--m">
+          <svg width="25px" height="24px" viewBox="335 429 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M355,434 L355,452 L359,452 L359,432 L359,430 L349,430 L349,434 L355,434 L355,434 Z M337,430 L335,430 L335,452 L339,452 L339,434 L345,434 L345,430 L337,430 L337,430 Z M349,442 L345,442 L345,434 L349,434 L349,442 L349,442 Z" stroke="none" fill="#FFFFFF" fill-rule="evenodd"></path>
+          </svg>
+        </div>
+
+        <div id="js-logo-o" class="logo-char logo-char--o">
+          <svg width="14px" height="22px" viewBox="379 430 14 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M381,452 L379,452 L379,430 L381,430 L393,430 L393,432 L393,450 L393,452 L381,452 L381,452 Z M383,448 L383,434 L389,434 L389,448 L383,448 L383,448 Z" stroke="none" fill="#FFFFFF" fill-rule="evenodd"></path>
+          </svg>
+        </div>
+
+        <div id="js-logo-j" class="logo-char logo-char--j">
+          <svg width="16px" height="32px" viewBox="413 420 16 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(413.000000, 420.000000)">
+              <path d="M12,10 L16,10 L16,32 L12,32 L12,10 L12,10 Z M12,32 L6,32 L6,28 L12,28 L12,32 L12,32 Z M8,28 L0,28 L0,16 L8,16 L8,28 L8,28 Z" fill="#FFFFFF"></path>
+              <rect fill="#FFFFFF" x="12" y="0" width="4" height="4"></rect>
+            </g>
+          </svg>
+        </div>
+
+        <div id="js-logo-s" class="logo-char logo-char--s">
+          <svg width="20px" height="22px" viewBox="449 430 20 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M465,448 L449,448 L449,452 L467,452 L469,452 L469,444 L465,444 L465,448 Z M452,430 L449,430 L449,440 L453,440 L453,434 L469,434 L469,430 L452,430 Z M465,444 L465,440 L453,440 L453,444 L465,444 Z" id="Combined-Shape" stroke="none" fill="#FFFFFF" fill-rule="evenodd"></path>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+
+
+    
+
     
     <!-- <div class="el" id="js-el"></div> -->
 

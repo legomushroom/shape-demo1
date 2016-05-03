@@ -5,10 +5,10 @@ import TriangleLines  from './components/triangle-lines';
 import Triangles      from './components/triangles';
 import GreenScene     from './components/green-scene';
 import Circle         from './components/circle';
+import Logo           from './components/logo';
 
 // require('css/blocks/mojs-player.postcss.css');
 // let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
-
 
 class Demo extends Module {
   /*
@@ -19,7 +19,8 @@ class Demo extends Module {
     const mainTimeline = ( new mojs.Timeline )
       .add( new Triangles )
       .add( new GreenScene({ delay: 2700 }) )
-      .add( new Circle({ delay: 4000 }) );
+      .add( new Circle({ delay: 4000 }) )
+      .add( new Logo({ delay: 5900 }) );
 
     ( new MojsPlayer({ add: mainTimeline }) )
       .el.style[ 'z-index' ] = 10;

@@ -19,34 +19,31 @@ class GreenScene extends Module {
 
     let pinkSquare = new mojs.Transit({
       left: '50%', top: '50%',
-      shape: 'rect',
-      stroke: COLORS.HOTPINK,
-      strokeWidth: 50,
-      angle: { '-240': 0 },
-      radius: 25,
-      scale: { 0 : 2 },
-      duration: 1500,
-      fill: 'none',
-      easing: 'expo.out',
-      parent: greenBg,
-    }).then({ strokeWidth: 3, duration: 600, easing: 'cubic.out', radius: 25 });
-
-    pinkSquare.wrapperEl.style[ 'height' ] = '100%';
-    pinkSquare.wrapperEl.style[ 'position' ] = 'relative';
+      shape:        'rect',
+      stroke:       COLORS.HOTPINK,
+      strokeWidth:  40,
+      angle:        { '-240': 0 },
+      radius:       20,
+      scale:        { 0 : 2 },
+      duration:     1500,
+      fill:         'none',
+      easing:       'expo.out',
+      parent:       greenBg,
+    });
 
     this.trailOpts = {
-      left:         '40%', top: '23%',
-      shape:        'circle',
-      stroke:       'white',
-      strokeWidth:  { 5 : 0 },
-      fill:         'none',
-      radius:       25,
-      radiusX:      20,
-      angle:       -90,
-      duration:     1250,
-      delay:        200,
-      parent:       pinkSquare.el,
-      strokeLinecap: 'round',
+      left: '45%', top: '-12%',
+      shape:          'circle',
+      stroke:         'white',
+      strokeWidth:    { 5 : 0 },
+      fill:           'none',
+      radius:         25,
+      radiusX:        20,
+      angle:          -100,
+      duration:       1250,
+      delay:          200,
+      parent:         pinkSquare.el,
+      strokeLinecap:  'round',
       strokeDasharray: '20% 300%',
       strokeDashoffset: {'-75%': '-100%'},
     }
@@ -67,22 +64,22 @@ class GreenScene extends Module {
   _addTrail1 ( pinkSquare ) {
     let trail1 = new mojs.Transit(this.trailOpts);
 
-    this.trailOpts.angle = -150;
-    this.trailOpts.top = '14%';
-    this.trailOpts.left = '32%';
+    this.trailOpts.angle = -140;
+    this.trailOpts.top = '-22%';
+    this.trailOpts.left = '22%';
     this.trailOpts.radius = 15;
     this.trailOpts.radiusX = 10;
     let trail2 = new mojs.Transit(this.trailOpts);
 
     // this.trailOpts.stroke = 'red';
-    this.trailOpts.angle = -120;
-    this.trailOpts.top = '17%';
-    this.trailOpts.left = '32%';
+    this.trailOpts.angle = -100;
+    this.trailOpts.top = '-16%';
+    this.trailOpts.left = '36%';
     this.trailOpts.radius = 10;
     this.trailOpts.radiusX = 7;
     let trail3 = new mojs.Transit(this.trailOpts);
 
-    return [trail1, trail2, trail3];
+    return [ trail1, trail2, trail3 ];
   }
   /*
     Method to add trail.
@@ -90,24 +87,24 @@ class GreenScene extends Module {
     @returns {Array(Object)} Array of `Transits`.
   */
   _addTrail2 ( pinkSquare ) {
-    this.trailOpts.left    = '78%';
+    this.trailOpts.left    = '115%';
     this.trailOpts.top     = '40%';
     this.trailOpts.radius  = 22;
     this.trailOpts.radiusX = 20;
-    this.trailOpts.angle   = 0;
+    this.trailOpts.angle   = -10;
     let trail1 = new mojs.Transit(this.trailOpts);
 
-    this.trailOpts.angle = -60;
-    this.trailOpts.top = '32%';
-    this.trailOpts.left = '85%';
-    this.trailOpts.radius = 12;
+    this.trailOpts.angle   = -60;
+    this.trailOpts.left    = '122%';
+    this.trailOpts.top     = '19%';
+    this.trailOpts.radius  = 12;
     this.trailOpts.radiusX = 10;
     let trail2 = new mojs.Transit(this.trailOpts);
 
-    this.trailOpts.angle = -0;
-    this.trailOpts.top = '37%';
-    this.trailOpts.left = '78%';
-    this.trailOpts.radius = 10;
+    this.trailOpts.angle   = -20;
+    this.trailOpts.left    = '114%';
+    this.trailOpts.top     = '32%';
+    this.trailOpts.radius  = 10;
     this.trailOpts.radiusX = 8;
     let trail3 = new mojs.Transit(this.trailOpts);
 
@@ -119,8 +116,8 @@ class GreenScene extends Module {
     @returns {Array(Object)} Array of `Transits`.
   */
   _addTrail3 ( pinkSquare ) {
-    this.trailOpts.left    = '59%';
-    this.trailOpts.top     = '81%';
+    this.trailOpts.left    = '63%';
+    this.trailOpts.top     = '115%';
     this.trailOpts.radius  = 18;
     this.trailOpts.radiusX = 20;
     this.trailOpts.angle   = 75;
@@ -128,15 +125,15 @@ class GreenScene extends Module {
     let trail1 = new mojs.Transit(this.trailOpts);
 
     this.trailOpts.angle   = 80;
-    this.trailOpts.top     = '81%';
-    this.trailOpts.left    = '60%';
+    this.trailOpts.left    = '64%';
+    this.trailOpts.top     = '113%';
     this.trailOpts.radius  = 12;
     this.trailOpts.radiusX = 10;
     let trail2 = new mojs.Transit(this.trailOpts);
 
     this.trailOpts.angle   = 45;
-    this.trailOpts.left    = '67%';
-    this.trailOpts.top     = '84%';
+    this.trailOpts.left    = '83%';
+    this.trailOpts.top     = '120%';
     this.trailOpts.radius  = 10;
     this.trailOpts.radiusX = 8;
     let trail3 = new mojs.Transit(this.trailOpts);
@@ -149,26 +146,27 @@ class GreenScene extends Module {
     @returns {Array(Object)} Array of `Transits`.
   */
   _addTrail4 ( pinkSquare ) {
-    this.trailOpts.left    = '17%';
-    this.trailOpts.top     = '60%';
+    this.trailOpts.left    = '-19%';
+    this.trailOpts.top     = '64%';
     this.trailOpts.radius  = 20;
     this.trailOpts.radiusX = 18;
-    this.trailOpts.angle   = 150;
+    this.trailOpts.angle   = 135;
     // this.trailOpts.strokeDasharray = '';
     let trail1 = new mojs.Transit(this.trailOpts);
 
-    // this.trailOpts.angle   = 170;
-    this.trailOpts.left    = '16%';
-    this.trailOpts.top     = '66%';
+    this.trailOpts.angle   = 180;
+    this.trailOpts.left    = '-7%';
+    this.trailOpts.top     = '68%';
     this.trailOpts.radius  = 10;
     this.trailOpts.radiusX = 12;
     let trail2 = new mojs.Transit(this.trailOpts);
 
-    this.trailOpts.angle   = 180;
-    this.trailOpts.left    = '22%';
-    this.trailOpts.top     = '64%';
+    // this.trailOpts.angle   = 180;
+    this.trailOpts.left    = '-20%';
+    this.trailOpts.top     = '65%';
     this.trailOpts.radius  = 8;
     this.trailOpts.radiusX = 10;
+    // this.trailOpts.stroke = 'deeppink';
     let trail3 = new mojs.Transit(this.trailOpts);
 
     return [ trail1, trail2, trail3 ];

@@ -83,17 +83,21 @@
 
 	var _triangleLines2 = _interopRequireDefault(_triangleLines);
 
-	var _triangles = __webpack_require__(155);
+	var _triangles = __webpack_require__(156);
 
 	var _triangles2 = _interopRequireDefault(_triangles);
 
-	var _greenScene = __webpack_require__(157);
+	var _greenScene = __webpack_require__(158);
 
 	var _greenScene2 = _interopRequireDefault(_greenScene);
 
-	var _circle = __webpack_require__(158);
+	var _circle = __webpack_require__(159);
 
 	var _circle2 = _interopRequireDefault(_circle);
+
+	var _logo = __webpack_require__(160);
+
+	var _logo2 = _interopRequireDefault(_logo);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -114,7 +118,7 @@
 	  */
 
 	  Demo.prototype._render = function _render() {
-	    var mainTimeline = new mojs.Timeline().add(new _triangles2.default()).add(new _greenScene2.default({ delay: 2700 })).add(new _circle2.default({ delay: 4000 }));
+	    var mainTimeline = new mojs.Timeline().add(new _triangles2.default()).add(new _greenScene2.default({ delay: 2700 })).add(new _circle2.default({ delay: 4000 })).add(new _logo2.default({ delay: 5900 }));
 
 	    new _mojsPlayer2.default({ add: mainTimeline }).el.style['z-index'] = 10;
 	  };
@@ -9301,6 +9305,42 @@
 	  Module.prototype._findEl = function _findEl(selector) {
 	    return document.querySelector(selector);
 	  };
+	  /*
+	    Method to get window width.
+	    @private
+	    @returns Window width.
+	  */
+
+
+	  Module.prototype._getWindowWidth = function _getWindowWidth() {
+	    var w = window,
+	        width = w.innerWidth || e.clientWidth || g.clientWidth;
+
+	    return width;
+	  };
+	  /*
+	    Method to get window width.
+	    @private
+	    @returns Window width.
+	  */
+
+
+	  Module.prototype._getWindowHeight = function _getWindowHeight() {
+	    var w = window,
+	        height = w.innerHeight || e.clientHeight || g.clientHeight;
+
+	    return height;
+	  };
+	  /*
+	   Method to get max window size.
+	   @private
+	   @returns Max window size.
+	  */
+
+
+	  Module.prototype._getWindowSize = function _getWindowSize() {
+	    return Math.max(this._getWindowWidth(), this._getWindowHeight());
+	  };
 
 	  return Module;
 	}();
@@ -9331,7 +9371,7 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _colors = __webpack_require__(159);
+	var _colors = __webpack_require__(155);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -9400,6 +9440,27 @@
 
 /***/ },
 /* 155 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var COLORS = {
+	  WHITE: '#ffffff',
+	  BLACK: '#000000',
+	  GREEN: '#4AE3B5',
+	  PINK: '#E9BDAB',
+	  GREY: '#555555',
+	  CYAN: 'cyan',
+	  YELLOW: 'yellow',
+	  HOTPINK: 'deeppink'
+	};
+
+	exports.default = COLORS;
+
+/***/ },
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9426,11 +9487,11 @@
 
 	var _triangleLines2 = _interopRequireDefault(_triangleLines);
 
-	var _whiteTriangles = __webpack_require__(156);
+	var _whiteTriangles = __webpack_require__(157);
 
 	var _whiteTriangles2 = _interopRequireDefault(_whiteTriangles);
 
-	var _colors = __webpack_require__(159);
+	var _colors = __webpack_require__(155);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -9452,6 +9513,8 @@
 	  Triangles.prototype._render = function _render() {
 	    _Module.prototype._render.call(this);
 
+	    document.body.style['background'] = _colors2.default.GREY;
+
 	    return new mojs.Timeline().add(this._triangles(this.el), new _triangleLines2.default({ delay: 100 }));
 	  };
 	  /*
@@ -9467,15 +9530,15 @@
 	        o = {
 	      left: '50%', top: '50%',
 	      shape: 'polygon',
+	      fill: _colors2.default.CYAN,
+	      isShowEnd: false,
 	      duration: 800,
 	      radius: 65,
 	      angle: { '-120': '-40' },
-	      fill: _colors2.default.CYAN,
 	      x: { '-200': 20 },
 	      y: { '50': -20 },
 	      scaleX: { 0: 1.3 },
-	      parent: parent,
-	      isShowEnd: false
+	      parent: parent
 	    },
 	        thenO = { x: 0, y: 0, duration: 300, angle: -60, scaleX: 1 };
 
@@ -9507,7 +9570,7 @@
 	exports.default = Triangles;
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9530,7 +9593,7 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _colors = __webpack_require__(159);
+	var _colors = __webpack_require__(155);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -9671,7 +9734,7 @@
 	exports.default = WhiteTriangles;
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9694,7 +9757,7 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _colors = __webpack_require__(159);
+	var _colors = __webpack_require__(155);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -9734,28 +9797,25 @@
 	      left: '50%', top: '50%',
 	      shape: 'rect',
 	      stroke: _colors2.default.HOTPINK,
-	      strokeWidth: 50,
+	      strokeWidth: 40,
 	      angle: { '-240': 0 },
-	      radius: 25,
+	      radius: 20,
 	      scale: { 0: 2 },
 	      duration: 1500,
 	      fill: 'none',
 	      easing: 'expo.out',
 	      parent: greenBg
-	    }).then({ strokeWidth: 3, duration: 600, easing: 'cubic.out', radius: 25 });
-
-	    pinkSquare.wrapperEl.style['height'] = '100%';
-	    pinkSquare.wrapperEl.style['position'] = 'relative';
+	    });
 
 	    this.trailOpts = {
-	      left: '40%', top: '23%',
+	      left: '45%', top: '-12%',
 	      shape: 'circle',
 	      stroke: 'white',
 	      strokeWidth: { 5: 0 },
 	      fill: 'none',
 	      radius: 25,
 	      radiusX: 20,
-	      angle: -90,
+	      angle: -100,
 	      duration: 1250,
 	      delay: 200,
 	      parent: pinkSquare.el,
@@ -9776,17 +9836,17 @@
 	  GreenScene.prototype._addTrail1 = function _addTrail1(pinkSquare) {
 	    var trail1 = new mojs.Transit(this.trailOpts);
 
-	    this.trailOpts.angle = -150;
-	    this.trailOpts.top = '14%';
-	    this.trailOpts.left = '32%';
+	    this.trailOpts.angle = -140;
+	    this.trailOpts.top = '-22%';
+	    this.trailOpts.left = '22%';
 	    this.trailOpts.radius = 15;
 	    this.trailOpts.radiusX = 10;
 	    var trail2 = new mojs.Transit(this.trailOpts);
 
 	    // this.trailOpts.stroke = 'red';
-	    this.trailOpts.angle = -120;
-	    this.trailOpts.top = '17%';
-	    this.trailOpts.left = '32%';
+	    this.trailOpts.angle = -100;
+	    this.trailOpts.top = '-16%';
+	    this.trailOpts.left = '36%';
 	    this.trailOpts.radius = 10;
 	    this.trailOpts.radiusX = 7;
 	    var trail3 = new mojs.Transit(this.trailOpts);
@@ -9801,23 +9861,23 @@
 
 
 	  GreenScene.prototype._addTrail2 = function _addTrail2(pinkSquare) {
-	    this.trailOpts.left = '78%';
+	    this.trailOpts.left = '115%';
 	    this.trailOpts.top = '40%';
 	    this.trailOpts.radius = 22;
 	    this.trailOpts.radiusX = 20;
-	    this.trailOpts.angle = 0;
+	    this.trailOpts.angle = -10;
 	    var trail1 = new mojs.Transit(this.trailOpts);
 
 	    this.trailOpts.angle = -60;
-	    this.trailOpts.top = '32%';
-	    this.trailOpts.left = '85%';
+	    this.trailOpts.left = '122%';
+	    this.trailOpts.top = '19%';
 	    this.trailOpts.radius = 12;
 	    this.trailOpts.radiusX = 10;
 	    var trail2 = new mojs.Transit(this.trailOpts);
 
-	    this.trailOpts.angle = -0;
-	    this.trailOpts.top = '37%';
-	    this.trailOpts.left = '78%';
+	    this.trailOpts.angle = -20;
+	    this.trailOpts.left = '114%';
+	    this.trailOpts.top = '32%';
 	    this.trailOpts.radius = 10;
 	    this.trailOpts.radiusX = 8;
 	    var trail3 = new mojs.Transit(this.trailOpts);
@@ -9832,8 +9892,8 @@
 
 
 	  GreenScene.prototype._addTrail3 = function _addTrail3(pinkSquare) {
-	    this.trailOpts.left = '59%';
-	    this.trailOpts.top = '81%';
+	    this.trailOpts.left = '63%';
+	    this.trailOpts.top = '115%';
 	    this.trailOpts.radius = 18;
 	    this.trailOpts.radiusX = 20;
 	    this.trailOpts.angle = 75;
@@ -9841,15 +9901,15 @@
 	    var trail1 = new mojs.Transit(this.trailOpts);
 
 	    this.trailOpts.angle = 80;
-	    this.trailOpts.top = '81%';
-	    this.trailOpts.left = '60%';
+	    this.trailOpts.left = '64%';
+	    this.trailOpts.top = '113%';
 	    this.trailOpts.radius = 12;
 	    this.trailOpts.radiusX = 10;
 	    var trail2 = new mojs.Transit(this.trailOpts);
 
 	    this.trailOpts.angle = 45;
-	    this.trailOpts.left = '67%';
-	    this.trailOpts.top = '84%';
+	    this.trailOpts.left = '83%';
+	    this.trailOpts.top = '120%';
 	    this.trailOpts.radius = 10;
 	    this.trailOpts.radiusX = 8;
 	    var trail3 = new mojs.Transit(this.trailOpts);
@@ -9864,26 +9924,27 @@
 
 
 	  GreenScene.prototype._addTrail4 = function _addTrail4(pinkSquare) {
-	    this.trailOpts.left = '17%';
-	    this.trailOpts.top = '60%';
+	    this.trailOpts.left = '-19%';
+	    this.trailOpts.top = '64%';
 	    this.trailOpts.radius = 20;
 	    this.trailOpts.radiusX = 18;
-	    this.trailOpts.angle = 150;
+	    this.trailOpts.angle = 135;
 	    // this.trailOpts.strokeDasharray = '';
 	    var trail1 = new mojs.Transit(this.trailOpts);
 
-	    // this.trailOpts.angle   = 170;
-	    this.trailOpts.left = '16%';
-	    this.trailOpts.top = '66%';
+	    this.trailOpts.angle = 180;
+	    this.trailOpts.left = '-7%';
+	    this.trailOpts.top = '68%';
 	    this.trailOpts.radius = 10;
 	    this.trailOpts.radiusX = 12;
 	    var trail2 = new mojs.Transit(this.trailOpts);
 
-	    this.trailOpts.angle = 180;
-	    this.trailOpts.left = '22%';
-	    this.trailOpts.top = '64%';
+	    // this.trailOpts.angle   = 180;
+	    this.trailOpts.left = '-20%';
+	    this.trailOpts.top = '65%';
 	    this.trailOpts.radius = 8;
 	    this.trailOpts.radiusX = 10;
+	    // this.trailOpts.stroke = 'deeppink';
 	    var trail3 = new mojs.Transit(this.trailOpts);
 
 	    return [trail1, trail2, trail3];
@@ -9895,7 +9956,7 @@
 	exports.default = GreenScene;
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9918,7 +9979,7 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _colors = __webpack_require__(159);
+	var _colors = __webpack_require__(155);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -9947,9 +10008,9 @@
 	      delay: this._props.delay,
 	      onStart: function onStart(isFwd) {
 	        _this2._toggleOpacity(pinkBg, isFwd);
-	      },
-	      onComplete: function onComplete(isFwd) {
-	        _this2._toggleOpacity(pinkBg, !isFwd);
+	        if (isFwd) {
+	          _this2.circle3._hide();
+	        }
 	      }
 	    });
 
@@ -9966,14 +10027,14 @@
 
 
 	  Circle.prototype._scaleCircles = function _scaleCircles(parent) {
-	    var circleSize = 25,
+	    var circleSize = 500,
 	        scale = this._calcScale(circleSize),
 	        opts = {
 	      parent: parent,
 	      left: '50%', top: '50%',
 	      radius: circleSize,
-	      fill: '#555',
-	      scale: { 1: 4 },
+	      fill: _colors2.default.GREY,
+	      scale: { 0.05: 0.2 },
 	      isShowEnd: false,
 	      duration: 800,
 	      easing: 'cubic.out'
@@ -9981,7 +10042,7 @@
 
 	    var circle1 = new mojs.Transit(opts).then({
 	      easing: 'cubic.inout',
-	      scale: 2.5,
+	      scale: .125,
 	      duration: 600
 	    }).then({
 	      easing: 'cubic.inout',
@@ -9989,10 +10050,8 @@
 	      duration: 800
 	    });
 
-	    // circle1.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
-
 	    opts.fill = _colors2.default.PINK;
-	    opts.scale = { 0: 2.25 };
+	    opts.scale = { 0: .1125 };
 	    opts.duration = 700;
 	    opts.delay = 1000;
 	    var circle2 = new mojs.Transit(opts).then({
@@ -10001,17 +10060,35 @@
 	      duration: 700
 	    });
 
-	    // circle2.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
-
 	    opts.fill = _colors2.default.GREY;
 	    opts.scale = { 0: scale };
 	    opts.duration = 1000;
 	    opts.delay = 2000;
+	    opts.isShowEnd = true;
 	    var circle3 = new mojs.Transit(opts);
+	    this.circle3 = circle3;
 
-	    // circle3.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+	    circle1._modules[0].el.style['backface-visibility'] = 'hidden';
+	    circle1._modules[1].el.style['backface-visibility'] = 'hidden';
+	    circle1._modules[2].el.style['backface-visibility'] = 'hidden';
+	    circle2._modules[0].el.style['backface-visibility'] = 'hidden';
+	    circle2._modules[1].el.style['backface-visibility'] = 'hidden';
+	    circle3.el.style['backface-visibility'] = 'hidden';
 
-	    return [circle1, circle2, circle3];
+	    var smallCircle = new mojs.Shape({
+	      parent: parent,
+	      left: '50%', top: '50%',
+	      radius: { 5: 25 },
+	      fill: 'none',
+	      stroke: _colors2.default.GREY,
+	      strokeWidth: { 20: 0 },
+	      isShowEnd: false,
+	      delay: 1200,
+	      duration: 500
+	    });
+
+	    // opacity:      { 1: 0 }
+	    return [circle1, circle2, circle3, smallCircle];
 	  };
 	  /*
 	    Method to add the lines that are near circle.
@@ -10031,6 +10108,7 @@
 	      stroke: _colors2.default.GREY,
 	      strokeWidth: { 15: 0 },
 	      duration: 1000,
+	      isShowEnd: false,
 	      strokeDasharray: '100% 100%',
 	      strokeDashoffset: { '-100%': '100%' },
 	      easing: 'cubic.out'
@@ -10073,20 +10151,6 @@
 	    return [triangle1, triangle2];
 	  };
 	  /*
-	    Method to get max window size.
-	    @private
-	    @returns Max window size.
-	  */
-
-
-	  Circle.prototype._getWindowSize = function _getWindowSize() {
-	    var w = window,
-	        width = w.innerWidth || e.clientWidth || g.clientWidth,
-	        height = w.innerHeight || e.clientHeight || g.clientHeight;
-
-	    return Math.max(width, height);
-	  };
-	  /*
 	    Method to scale amount for radius to fill the screen.
 	    @private
 	    @returns Scale size.
@@ -10105,25 +10169,344 @@
 	exports.default = Circle;
 
 /***/ },
-/* 159 */
-/***/ function(module, exports) {
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var COLORS = {
-	  WHITE: '#ffffff',
-	  BLACK: '#000000',
-	  GREEN: '#74CBA0',
-	  PINK: '#E9BDAB',
-	  GREY: '#555555',
-	  CYAN: 'cyan',
-	  YELLOW: 'yellow',
-	  HOTPINK: 'hotpink'
-	};
+	var _classCallCheck2 = __webpack_require__(2);
 
-	exports.default = COLORS;
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(153);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _colors = __webpack_require__(155);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Logo = function (_Module) {
+	  (0, _inherits3.default)(Logo, _Module);
+
+	  function Logo() {
+	    (0, _classCallCheck3.default)(this, Logo);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method for initial module's render.
+	    @private
+	  */
+
+	  Logo.prototype._render = function _render() {
+	    var _this2 = this;
+
+	    _Module.prototype._render.call(this);
+	    var logo = this._findEl('#js-logo');
+	    var mChar = this._findEl('#js-logo-m');
+	    var oChar = this._findEl('#js-logo-o');
+	    var jChar = this._findEl('#js-logo-j');
+	    var sChar = this._findEl('#js-logo-s');
+	    var pinkBg = this._findEl('#js-pink-bg'),
+	        shiftEase = mojs.easing.path('M0,100 C50,100 50,100 50,50 C50,0 50,0 100,0'),
+	        scaleEase = mojs.easing.path('M0,100 C21.3776817,95.8051376 50,77.3262711 50,0 C50,80.1708527 76.6222458,93.9449005 100,100'),
+	        timeline = new mojs.Timeline({
+	      delay: this._props.delay,
+	      onStart: function onStart(isFwd) {
+	        _this2._toggleOpacity(pinkBg, isFwd);
+	        mojs.h.setPrefixedStyle(logo, 'transform', 'none');
+	      },
+	      onComplete: function onComplete(isFwd) {
+	        _this2._toggleOpacity(pinkBg, !isFwd);
+	        _this2._toggleOpacity(mChar, !isFwd);
+	        _this2._toggleOpacity(oChar, !isFwd);
+	        _this2._toggleOpacity(jChar, !isFwd);
+	        _this2._toggleOpacity(sChar, !isFwd);
+	      }
+	    });
+
+	    return timeline.add(this._mChar(shiftEase, scaleEase), this._oChar(shiftEase, scaleEase), this._jChar(shiftEase, scaleEase), this._sChar(shiftEase, scaleEase), this._logoShift(shiftEase, scaleEase));
+	  };
+	  /*
+	    Method to describe last shift logo sequence.
+	    @private
+	    @param {Function} Shift easing.
+	    @param {Function} Scale easing.
+	  */
+
+
+	  Logo.prototype._logoShift = function _logoShift(shiftEase, scaleEase) {
+	    var timeline = new mojs.Timeline({ delay: 4000 });
+
+	    var logo = this._findEl('#js-logo');
+
+	    this._getLastShift();
+	    var yShift = this._lastShift;
+
+	    mojs.h.setPrefixedStyle(logo, 'transform-origin', '50% 0');
+	    var tween = new mojs.Tween({
+	      duration: 600,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = mojs.easing.cubic.in(p);
+	        var scaleP = mojs.easing.quad.in(p);
+
+	        mojs.h.setPrefixedStyle(logo, 'transform', 'translate(0px, ' + yShift * shiftP + 'px)\n          scaleY(' + (1 + 25 * scaleP) + ')');
+	      }
+	    });
+
+	    return timeline.add(tween);
+	  };
+	  /*
+	    Method to get the last Y shift.
+	  */
+
+
+	  Logo.prototype._getLastShift = function _getLastShift() {
+	    var height = this._getWindowHeight();
+	    this._lastShift = height / 1.5;
+	  };
+	  /*
+	    Method to describe M character sequnce.
+	    @private
+	    @param {Function} Shift easing.
+	    @param {Function} Scale easing.
+	  */
+
+
+	  Logo.prototype._mChar = function _mChar(shiftEase, scaleEase) {
+	    var _this3 = this;
+
+	    var char = this._findEl('#js-logo-m');
+	    var timeline = new mojs.Timeline();
+
+	    var xShift = 0;var yShift = 100;
+
+	    var tween1 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 1000,
+	      delay: 400,
+	      onStart: function onStart(isFwd) {
+	        _this3._toggleOpacity(char, isFwd);
+	      },
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + (500 * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 14 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
+	      }
+	    });
+	    timeline.add(tween1);
+
+	    var tween2 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 1000,
+	      delay: 200,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 3 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
+	      }
+	    });
+	    timeline.append(tween2);
+
+	    return timeline;
+	  };
+	  /*
+	    Method to describe O character sequnce.
+	    @private
+	    @param {Function} Shift easing.
+	    @param {Function} Scale easing.
+	  */
+
+
+	  Logo.prototype._oChar = function _oChar(shiftEase, scaleEase) {
+	    var _this4 = this;
+
+	    var timeline = new mojs.Timeline();
+	    var char = this._findEl('#js-logo-o');
+
+	    var xShift = 200;var yShift = 200;
+
+	    var tween1 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 800,
+	      delay: 600,
+	      onStart: function onStart(isFwd) {
+	        _this4._toggleOpacity(char, isFwd);
+	      },
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + xShift + 'px, ' + ((-500 - yShift) * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 15 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * shiftP + '%');
+	      }
+	    });
+	    timeline.add(tween1);
+
+	    var tween2 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 750,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + xShift * (1 - shiftP) + 'px, ' + yShift + 'px)\n           scaleX(' + (1 + 15 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', 100 * (1 - shiftP) + '% 50%');
+	      }
+	    });
+
+	    timeline.append(tween2);
+
+	    var tween3 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 750,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 7 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
+	      }
+	    });
+
+	    timeline.append(tween3);
+
+	    return timeline;
+	  };
+	  /*
+	    Method to describe J character sequnce.
+	    @private
+	    @param {Function} Shift easing.
+	    @param {Function} Scale easing.
+	  */
+
+
+	  Logo.prototype._jChar = function _jChar(shiftEase, scaleEase) {
+	    var _this5 = this;
+
+	    var timeline = new mojs.Timeline();
+	    var char = this._findEl('#js-logo-j');
+
+	    var xShift = 200;var yShift = 200;
+
+	    var tween1 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 1000,
+	      onStart: function onStart(isFwd) {
+	        _this5._toggleOpacity(char, isFwd);
+	      },
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + ((500 + yShift) * (1 - shiftP) - yShift) + 'px)\n           scaleY(' + (1 + 12 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
+	      }
+	    });
+	    timeline.add(tween1);
+
+	    var tween2 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 1000,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + -xShift * (1 - shiftP) + 'px, ' + -yShift + 'px)\n           scaleX(' + (1 + 15 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', 100 * shiftP + '% 50%');
+	      }
+	    });
+
+	    timeline.append(tween2);
+
+	    var tween3 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 1000,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + -yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 4 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * shiftP + '%');
+	      }
+	    });
+
+	    timeline.append(tween3);
+
+	    return timeline;
+	  };
+	  /*
+	    Method to describe S character sequnce.
+	    @private
+	    @param {Function} Shift easing.
+	    @param {Function} Scale easing.
+	  */
+
+
+	  Logo.prototype._sChar = function _sChar(shiftEase, scaleEase) {
+	    var _this6 = this;
+
+	    var timeline = new mojs.Timeline();
+	    var char = this._findEl('#js-logo-s');
+
+	    var xShift = 500;var yShift = 200;
+
+	    var tween1 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 900,
+	      delay: 200,
+	      onStart: function onStart(isFwd) {
+	        _this6._toggleOpacity(char, isFwd);
+	      },
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + xShift * (1 - shiftP) + 'px, ' + yShift + 'px)\n           scaleX(' + (1 + 19 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', 100 * (1 - shiftP) + '% 50%');
+	      }
+	    });
+	    timeline.add(tween1);
+
+	    var tween2 = new mojs.Tween({
+	      easing: 'linear.none',
+	      duration: 900,
+	      delay: 200,
+	      onUpdate: function onUpdate(p) {
+	        var shiftP = shiftEase(p);
+	        var scaleP = scaleEase(p);
+
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 6 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
+	      }
+	    });
+
+	    timeline.append(tween2);
+
+	    return timeline;
+	  };
+
+	  return Logo;
+	}(_module2.default);
+
+	exports.default = Logo;
 
 /***/ }
 /******/ ]);

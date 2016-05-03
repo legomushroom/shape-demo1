@@ -12,8 +12,10 @@ class Circle extends Module {
     let pinkBg   = this._findEl('#js-pink-bg'),
         timeline = new mojs.Timeline({
           delay:   this._props.delay,
-          onStart: ( isFwd ) => { this._toggleOpacity( pinkBg, isFwd ); },
-          onComplete: ( isFwd ) => { this._toggleOpacity( pinkBg, !isFwd ); }
+          onStart: ( isFwd ) => {
+            this._toggleOpacity( pinkBg, isFwd );
+            if ( isFwd ) { this.circle3._hide(); }
+          }
         });
 
     pinkBg.style[ 'background' ] = COLORS.PINK;
@@ -30,14 +32,14 @@ class Circle extends Module {
     @returns {Array(Object)} Array of timelines.
   */
   _scaleCircles ( parent ) {
-    let circleSize = 25,
+    let circleSize = 500,
         scale      = this._calcScale( circleSize ),
         opts       = {
           parent,
           left:       '50%', top: '50%',
           radius:     circleSize,
-          fill:       '#555',
-          scale:      { 1 : 4 },
+          fill:       COLORS.GREY,
+          scale:      { 0.05 : 0.2 },
           isShowEnd:  false,
           duration:   800,
           easing:     'cubic.out'
@@ -46,7 +48,7 @@ class Circle extends Module {
     const circle1 = new mojs.Transit(opts)
       .then({
         easing:     'cubic.inout',
-        scale:      2.5,
+        scale:      .125,
         duration:   600
       }).then({
         easing:     'cubic.inout',
@@ -54,10 +56,8 @@ class Circle extends Module {
         duration:   800
       });
 
-    // circle1.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
-
     opts.fill     = COLORS.PINK;
-    opts.scale    = { 0 : 2.25};
+    opts.scale    = { 0 : .1125 };
     opts.duration = 700;
     opts.delay    = 1000;
     const circle2 = new mojs.Transit(opts)
@@ -67,17 +67,35 @@ class Circle extends Module {
         duration:   700
       });
 
-    // circle2.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
-
-    opts.fill     = COLORS.GREY;
-    opts.scale    = { 0 : scale };
-    opts.duration = 1000;
-    opts.delay    = 2000;
+    opts.fill       = COLORS.GREY;
+    opts.scale      = { 0 : scale };
+    opts.duration   = 1000;
+    opts.delay      = 2000;
+    opts.isShowEnd  = true;
     const circle3 = new mojs.Transit(opts);
+    this.circle3 = circle3;
 
-    // circle3.wrapperEl.style[ 'backface-visibility' ] = 'hidden';
+    circle1._modules[0].el.style[ 'backface-visibility' ] = 'hidden';
+    circle1._modules[1].el.style[ 'backface-visibility' ] = 'hidden';
+    circle1._modules[2].el.style[ 'backface-visibility' ] = 'hidden';
+    circle2._modules[0].el.style[ 'backface-visibility' ] = 'hidden';
+    circle2._modules[1].el.style[ 'backface-visibility' ] = 'hidden';
+    circle3.el.style[ 'backface-visibility' ] = 'hidden';
 
-    return [ circle1, circle2, circle3 ];
+    let smallCircle = new mojs.Shape({
+      parent,
+      left: '50%', top: '50%',
+      radius:       { 5: 25 },
+      fill:         'none',
+      stroke:       COLORS.GREY,
+      strokeWidth:  { 20: 0 },
+      isShowEnd:    false,
+      delay:        1200,
+      duration:     500,
+      // opacity:      { 1: 0 }
+    });
+
+    return [ circle1, circle2, circle3, smallCircle ];
   }
   /*
     Method to add the lines that are near circle.
@@ -95,6 +113,7 @@ class Circle extends Module {
       stroke:           COLORS.GREY,
       strokeWidth:      {15 : 0},
       duration:         1000,
+      isShowEnd:        false,
       strokeDasharray:  '100% 100%',
       strokeDashoffset: { '-100%': '100%' },
       easing:           'cubic.out',
@@ -133,18 +152,6 @@ class Circle extends Module {
     triangleOpts.angle  = 180;
     const triangle2 = new mojs.Transit( triangleOpts );
     return [ triangle1, triangle2 ]
-  }
-  /*
-    Method to get max window size.
-    @private
-    @returns Max window size.
-  */
-  _getWindowSize () {
-    let w = window,
-        width  = w.innerWidth || e.clientWidth || g.clientWidth,
-        height = w.innerHeight || e.clientHeight || g.clientHeight;
-
-    return Math.max( width, height );
   }
   /*
     Method to scale amount for radius to fill the screen.

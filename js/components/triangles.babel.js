@@ -11,6 +11,8 @@ class Triangles extends Module {
   _render () {
     super._render();
 
+    document.body.style[ 'background' ] = COLORS.GREY;
+
     return (new mojs.Timeline)
       .add( this._triangles( this.el ), new TriangleLines({ delay: 100 }) );
   }
@@ -25,15 +27,15 @@ class Triangles extends Module {
         o = {
           left:       '50%', top: '50%',
           shape:      'polygon',
+          fill:       COLORS.CYAN,
+          isShowEnd:  false,
           duration:   800,
           radius:     65,
           angle:      { '-120': '-40' },
-          fill:       COLORS.CYAN,
           x:          { '-200': 20 },
           y:          { '50': -20 },
           scaleX:     { 0 : 1.3 },
           parent,
-          isShowEnd:  false
         },
         thenO = { x: 0, y: 0, duration: 300, angle: -60, scaleX: 1 };
 

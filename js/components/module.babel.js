@@ -202,6 +202,36 @@ class Module {
   _findEl ( selector ) {
     return document.querySelector( selector );
   }
+  /*
+    Method to get window width.
+    @private
+    @returns Window width.
+  */
+  _getWindowWidth () {
+    let w     = window,
+        width = w.innerWidth || e.clientWidth || g.clientWidth;
+
+    return width;
+  }
+  /*
+    Method to get window width.
+    @private
+    @returns Window width.
+  */
+  _getWindowHeight () {
+    let w      = window,
+        height = w.innerHeight || e.clientHeight || g.clientHeight;
+
+    return height;
+  }
+   /*
+    Method to get max window size.
+    @private
+    @returns Max window size.
+  */
+  _getWindowSize () {
+    return Math.max( this._getWindowWidth(), this._getWindowHeight() );
+  }
 }
 
 export default Module;
