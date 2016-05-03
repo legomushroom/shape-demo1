@@ -9811,13 +9811,13 @@
 	      left: '45%', top: '-12%',
 	      shape: 'circle',
 	      stroke: 'white',
-	      strokeWidth: { 5: 0 },
+	      strokeWidth: { 6: 0 },
 	      fill: 'none',
 	      radius: 25,
 	      radiusX: 20,
 	      angle: -100,
-	      duration: 1250,
-	      delay: 200,
+	      duration: 1150,
+	      delay: 300,
 	      parent: pinkSquare.el,
 	      strokeLinecap: 'round',
 	      strokeDasharray: '20% 300%',
@@ -10235,10 +10235,96 @@
 	        _this2._toggleOpacity(oChar, !isFwd);
 	        _this2._toggleOpacity(jChar, !isFwd);
 	        _this2._toggleOpacity(sChar, !isFwd);
+
+	        var modules = _this2.underlineShape.childModules;
+	        for (var i = 0; i < modules.length; i++) {
+	          modules[i]._hide();
+	        }
 	      }
 	    });
 
-	    return timeline.add(this._mChar(shiftEase, scaleEase), this._oChar(shiftEase, scaleEase), this._jChar(shiftEase, scaleEase), this._sChar(shiftEase, scaleEase), this._logoShift(shiftEase, scaleEase));
+	    return timeline.add(this._mChar(shiftEase, scaleEase), this._oChar(shiftEase, scaleEase), this._jChar(shiftEase, scaleEase), this._sChar(shiftEase, scaleEase), this._logoShift(shiftEase, scaleEase), this._addLines(logo), this._addShapes(logo));
+	  };
+	  /*
+	    Method to add bright line shapes.
+	    @private
+	    @param {Object} HTML element to use as parent of shapes.
+	    @returns {Array(Object)} Array of Shapes.
+	  */
+
+
+	  Logo.prototype._addShapes = function _addShapes(parent) {
+	    var StaggerShape = mojs.stagger(mojs.Shape);
+
+	    var stagger = new StaggerShape({
+	      parent: parent,
+	      x: [75, 105, 95],
+	      y: [-15, 5, -25],
+	      quantifier: 'shape',
+	      shape: ['circle', 'polygon', 'rect'],
+	      radius: 7,
+	      fill: 'none',
+	      stroke: [_colors2.default.HOTPINK, _colors2.default.CYAN, _colors2.default.YELLOW],
+	      strokeWidth: { 5: 0 },
+	      scale: { .75: 1 },
+	      delay: 'stagger(3000, 100)'
+	    });
+	    return stagger;
+	  };
+	  /*
+	    Method to add bright line shapes.
+	    @private
+	    @param {Object} HTML element to use as parent of shapes.
+	    @returns {Array(Object)} Array of Shapes.
+	  */
+
+
+	  Logo.prototype._addLines = function _addLines(logo) {
+	    var opts = {
+	      shape: 'line',
+	      x: 233,
+	      y: { 0: 150 },
+	      strokeWidth: 5,
+	      stroke: _colors2.default.CYAN,
+	      radius: 44,
+	      parent: logo,
+	      angle: 90,
+	      duration: 800,
+	      delay: 850,
+	      isShowStart: 1,
+	      strokeDasharray: '100% 100%',
+	      strokeDashoffset: { '100%': '-100%' }
+	    };
+	    var shape1 = new mojs.Shape(opts);
+
+	    opts.x = -140;
+	    opts.y = { 200: 0 };
+	    opts.stroke = _colors2.default.HOTPINK;
+	    opts.strokeDashoffset = { '-100%': '100%' };
+	    opts.delay = 300;
+	    var shape2 = new mojs.Shape(opts);
+
+	    opts.x = 43;
+	    opts.y = 20;
+	    opts.stroke = _colors2.default.YELLOW;
+	    opts.delay = 1200;
+	    opts.angle = 0;
+	    var shape3 = new mojs.Shape(opts);
+
+	    var StaggerShape = new mojs.stagger(mojs.Shape);
+
+	    opts.y = 40;
+	    opts.strokeWidth = 3;
+	    opts.stroke = [_colors2.default.HOTPINK, _colors2.default.YELLOW, _colors2.default.CYAN, _colors2.default.WHITE];
+	    opts.duration = 1000;
+	    opts.delay = 'stagger(2600, 250)';
+	    opts.strokeDashoffset = { '100%': 0 };
+	    opts.quantifier = 'stroke';
+	    opts.easing = 'expo.out';
+	    var shape4 = new StaggerShape(opts);
+	    this.underlineShape = shape4;
+
+	    return [shape1, shape2, shape3, shape4];
 	  };
 	  /*
 	    Method to describe last shift logo sequence.
@@ -10249,7 +10335,7 @@
 
 
 	  Logo.prototype._logoShift = function _logoShift(shiftEase, scaleEase) {
-	    var timeline = new mojs.Timeline({ delay: 4000 });
+	    var timeline = new mojs.Timeline({ delay: 4800 });
 
 	    var logo = this._findEl('#js-logo');
 
@@ -10305,7 +10391,7 @@
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + (500 * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 14 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + (250 * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 7 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
 	      }
 	    });
@@ -10341,7 +10427,7 @@
 	    var timeline = new mojs.Timeline();
 	    var char = this._findEl('#js-logo-o');
 
-	    var xShift = 200;var yShift = 200;
+	    var xShift = 200;var yShift = 250;
 
 	    var tween1 = new mojs.Tween({
 	      easing: 'linear.none',
@@ -10354,7 +10440,7 @@
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + xShift + 'px, ' + ((-500 - yShift) * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 15 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(' + xShift + 'px, ' + (-yShift * (1 - shiftP) + yShift) + 'px)\n           scaleY(' + (1 + 8 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * shiftP + '%');
 	      }
 	    });
@@ -10362,7 +10448,7 @@
 
 	    var tween2 = new mojs.Tween({
 	      easing: 'linear.none',
-	      duration: 750,
+	      duration: 700,
 	      onUpdate: function onUpdate(p) {
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
@@ -10376,12 +10462,12 @@
 
 	    var tween3 = new mojs.Tween({
 	      easing: 'linear.none',
-	      duration: 750,
+	      duration: 700,
 	      onUpdate: function onUpdate(p) {
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 7 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 6 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
 	      }
 	    });
@@ -10404,7 +10490,7 @@
 	    var timeline = new mojs.Timeline();
 	    var char = this._findEl('#js-logo-j');
 
-	    var xShift = 200;var yShift = 200;
+	    var xShift = 200;var yShift = 100;
 
 	    var tween1 = new mojs.Tween({
 	      easing: 'linear.none',
@@ -10416,7 +10502,7 @@
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + ((500 + yShift) * (1 - shiftP) - yShift) + 'px)\n           scaleY(' + (1 + 12 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(-' + xShift + 'px, ' + ((250 + yShift) * (1 - shiftP) - yShift) + 'px)\n           scaleY(' + (1 + 10 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
 	      }
 	    });
@@ -10424,7 +10510,7 @@
 
 	    var tween2 = new mojs.Tween({
 	      easing: 'linear.none',
-	      duration: 1000,
+	      duration: 900,
 	      onUpdate: function onUpdate(p) {
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
@@ -10438,12 +10524,12 @@
 
 	    var tween3 = new mojs.Tween({
 	      easing: 'linear.none',
-	      duration: 1000,
+	      duration: 900,
 	      onUpdate: function onUpdate(p) {
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + -yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 4 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + -yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 3 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * shiftP + '%');
 	      }
 	    });
@@ -10493,7 +10579,7 @@
 	        var shiftP = shiftEase(p);
 	        var scaleP = scaleEase(p);
 
-	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 6 * scaleP) + ')');
+	        mojs.h.setPrefixedStyle(char, 'transform', 'translate(0px, ' + yShift * (1 - shiftP) + 'px)\n           scaleY(' + (1 + 5.5 * scaleP) + ')');
 	        mojs.h.setPrefixedStyle(char, 'transform-origin', '50% ' + 100 * (1 - shiftP) + '%');
 	      }
 	    });

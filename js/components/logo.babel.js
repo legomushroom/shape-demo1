@@ -28,6 +28,11 @@ class Logo extends Module {
             this._toggleOpacity( oChar,  !isFwd );
             this._toggleOpacity( jChar,  !isFwd );
             this._toggleOpacity( sChar,  !isFwd );
+
+            let modules = this.underlineShape.childModules;
+            for (var i = 0; i < modules.length; i++) {
+              modules[i]._hide();
+            }
           }
         });
     
@@ -36,8 +41,87 @@ class Logo extends Module {
       this._oChar( shiftEase, scaleEase ),
       this._jChar( shiftEase, scaleEase ),
       this._sChar( shiftEase, scaleEase ),
-      this._logoShift( shiftEase, scaleEase )
+      this._logoShift( shiftEase, scaleEase ),
+      this._addLines( logo ),
+      this._addShapes( logo )
     );
+  }
+  /*
+    Method to add bright line shapes.
+    @private
+    @param {Object} HTML element to use as parent of shapes.
+    @returns {Array(Object)} Array of Shapes.
+  */
+  _addShapes ( parent ) {
+    let StaggerShape = mojs.stagger( mojs.Shape );
+
+    let stagger = new StaggerShape({
+      parent,
+      x: [ 75, 105, 95 ],
+      y: [ -15, 5, -25 ],
+      quantifier:  'shape',
+      shape:        [ 'circle', 'polygon', 'rect' ],
+      radius:       7,
+      fill:         'none',
+      stroke:       [ COLORS.HOTPINK, COLORS.CYAN, COLORS.YELLOW ],
+      strokeWidth:  { 5 : 0 },
+      scale:        { .75 : 1 },
+      delay:        'stagger(3000, 100)',
+    });
+    return stagger;
+  }
+  /*
+    Method to add bright line shapes.
+    @private
+    @param {Object} HTML element to use as parent of shapes.
+    @returns {Array(Object)} Array of Shapes.
+  */
+  _addLines ( logo ) {
+    let opts = {
+      shape: 'line',
+      x:        233,
+      y:        { 0 : 150 },
+      strokeWidth: 5,
+      stroke: COLORS.CYAN,
+      radius: 44,
+      parent: logo,
+      angle:   90,
+      duration: 800,
+      delay: 850,
+      isShowStart: 1,
+      strokeDasharray: '100% 100%',
+      strokeDashoffset: { '100%': '-100%' }
+    }
+    let shape1 = new mojs.Shape( opts );
+
+    opts.x = -140;
+    opts.y = { 200 : 0 };
+    opts.stroke = COLORS.HOTPINK;
+    opts.strokeDashoffset = { '-100%': '100%' };
+    opts.delay = 300;
+    let shape2 = new mojs.Shape( opts );
+
+    opts.x = 43;
+    opts.y = 20;
+    opts.stroke = COLORS.YELLOW;
+    opts.delay = 1200;
+    opts.angle = 0;
+    let shape3 = new mojs.Shape( opts );
+
+    let StaggerShape = new mojs.stagger( mojs.Shape );
+
+    opts.y = 40;
+    opts.strokeWidth = 3;
+    opts.stroke = [ COLORS.HOTPINK, COLORS.YELLOW, COLORS.CYAN, COLORS.WHITE ];
+    opts.duration = 1000;
+    opts.delay = 'stagger(2600, 250)';
+    opts.strokeDashoffset = { '100%': 0 };
+    opts.quantifier = 'stroke';
+    opts.easing = 'expo.out';
+    let shape4 = new StaggerShape( opts );
+    this.underlineShape = shape4;
+
+    return [ shape1, shape2, shape3, shape4 ];
   }
   /*
     Method to describe last shift logo sequence.
@@ -46,7 +130,7 @@ class Logo extends Module {
     @param {Function} Scale easing.
   */
   _logoShift ( shiftEase, scaleEase ) {
-    let timeline = new mojs.Timeline({ delay: 4000 });
+    let timeline = new mojs.Timeline({ delay: 4800 });
 
     let logo = this._findEl( '#js-logo' );
 
@@ -98,8 +182,8 @@ class Logo extends Module {
         var scaleP = scaleEase( p );
 
         mojs.h.setPrefixedStyle( char, 'transform',
-          `translate(-${ xShift }px, ${ 500*(1-shiftP) + yShift }px)
-           scaleY(${ 1 + 14*scaleP })`
+          `translate(-${ xShift }px, ${ 250*(1-shiftP) + yShift }px)
+           scaleY(${ 1 + 7*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*(1-shiftP) }%`
@@ -139,7 +223,7 @@ class Logo extends Module {
     let timeline = new mojs.Timeline;
     let char = this._findEl( '#js-logo-o' );
 
-    let xShift = 200; let yShift = 200;
+    let xShift = 200; let yShift = 250;
 
     let tween1 = new mojs.Tween({
       easing:     'linear.none',
@@ -151,8 +235,8 @@ class Logo extends Module {
         var scaleP = scaleEase( p );
 
         mojs.h.setPrefixedStyle( char, 'transform',
-          `translate(${ xShift }px, ${ (-500 - yShift)*(1-shiftP) + yShift }px)
-           scaleY(${ 1 + 15*scaleP })`
+          `translate(${ xShift }px, ${ (- yShift)*(1-shiftP) + yShift }px)
+           scaleY(${ 1 + 8*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*shiftP }%`
@@ -163,7 +247,7 @@ class Logo extends Module {
 
     let tween2 = new mojs.Tween({
       easing:     'linear.none',
-      duration:   750,
+      duration:   700,
       onUpdate (p) {
         var shiftP = shiftEase( p );
         var scaleP = scaleEase( p );
@@ -182,14 +266,14 @@ class Logo extends Module {
 
     let tween3 = new mojs.Tween({
       easing:     'linear.none',
-      duration:   750,
+      duration:   700,
       onUpdate (p) {
         var shiftP = shiftEase( p );
         var scaleP = scaleEase( p );
 
         mojs.h.setPrefixedStyle( char, 'transform',
           `translate(0px, ${ yShift*(1-shiftP) }px)
-           scaleY(${ 1 + 7*scaleP })`
+           scaleY(${ 1 + 6*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*(1-shiftP) }%`
@@ -211,7 +295,7 @@ class Logo extends Module {
     let timeline = new mojs.Timeline;
     let char = this._findEl( '#js-logo-j' );
 
-    let xShift = 200; let yShift = 200;
+    let xShift = 200; let yShift = 100;
 
     let tween1 = new mojs.Tween({
       easing:     'linear.none',
@@ -222,8 +306,8 @@ class Logo extends Module {
         var scaleP = scaleEase( p );
 
         mojs.h.setPrefixedStyle( char, 'transform',
-          `translate(-${ xShift }px, ${ (500 + yShift)*(1-shiftP) - yShift }px)
-           scaleY(${ 1 + 12*scaleP })`
+          `translate(-${ xShift }px, ${ (250 + yShift)*(1-shiftP) - yShift }px)
+           scaleY(${ 1 + 10*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*(1-shiftP) }%`
@@ -234,7 +318,7 @@ class Logo extends Module {
 
     let tween2 = new mojs.Tween({
       easing:     'linear.none',
-      duration:   1000,
+      duration:   900,
       onUpdate (p) {
         var shiftP = shiftEase( p );
         var scaleP = scaleEase( p );
@@ -253,14 +337,14 @@ class Logo extends Module {
 
     let tween3 = new mojs.Tween({
       easing:     'linear.none',
-      duration:   1000,
+      duration:   900,
       onUpdate (p) {
         var shiftP = shiftEase( p );
         var scaleP = scaleEase( p );
 
         mojs.h.setPrefixedStyle( char, 'transform',
           `translate(0px, ${ -yShift*(1-shiftP) }px)
-           scaleY(${ 1 + 4*scaleP })`
+           scaleY(${ 1 + 3*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*shiftP }%`
@@ -314,7 +398,7 @@ class Logo extends Module {
 
         mojs.h.setPrefixedStyle( char, 'transform',
           `translate(0px, ${ yShift*(1-shiftP) }px)
-           scaleY(${ 1 + 6*scaleP })`
+           scaleY(${ 1 + 5.5*scaleP })`
         );
         mojs.h.setPrefixedStyle( char, 'transform-origin',
           `50% ${ 100*(1-shiftP) }%`
