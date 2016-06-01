@@ -2,11 +2,12 @@
 const COLORS = {
   WHITE:   '#ffffff',
   BLACK:   '#000000',
-  GREEN:   '#4AE3B5',
-  PINK:    '#E9BDAB',
-  GREY:    '#555555',
+  GREEN:   '#49F2CC',
+  PINK:    '#777',
+  GREY:    '#29363B',
   CYAN:    'cyan',
-  YELLOW:  'yellow',
+  YELLOW:  '#FFE202',
+  // HOTPINK: '#8E0CE8',
   HOTPINK: 'deeppink',
 }
 

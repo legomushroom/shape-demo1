@@ -27,7 +27,7 @@ class TriangleLines extends Module {
         };
 
     let shape1 = new mojs.Transit(o);
-    shape1.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    shape1.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.stroke           = COLORS.HOTPINK; 
     o.strokeDasharray  = {'30% 120%' : '0% 120%'}; 
@@ -35,14 +35,14 @@ class TriangleLines extends Module {
     o.angle            = { '-80': '-60' };
     o.delay            = 75;
     let shape2 = new mojs.Transit(o);
-    shape2.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    shape2.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.stroke           = COLORS.YELLOW; 
     o.strokeDashoffset = { '42%' : '-86%' }; 
     o.angle            = { '-90': '-60' };
     o.delay            = 150;
     let shape3  = new mojs.Transit(o);
-    shape3.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    shape3.el.style[ 'mix-blend-mode' ] = blendMode;
 
     return [ shape1, shape2, shape3 ];
   }

@@ -145,7 +145,6 @@ class Module {
     // this._deltas = {};
     for (var key in this._defaults) {
       let value = this._o[key];
-      this.isIt && console.log(key)
       // copy the properties to the _o object
       this._assignProp( key, ( value != null ) ? value : this._defaults[key] );
     }

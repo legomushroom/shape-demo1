@@ -40,23 +40,23 @@ class Triangles extends Module {
         thenO = { x: 0, y: 0, duration: 300, angle: -60, scaleX: 1 };
 
     let tr1 = new mojs.Transit(o).then(thenO);
-    tr1.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    tr1.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.fill             = COLORS.HOTPINK; 
     o.angle            = { '-180': '-20' };
     o.y                = { '30': '-30' };
     o.delay            = 75;
-    o.scaleX          = { 0 : 1.46 };
+    o.scaleX           = { 0 : 1.46 };
     let tr2 = new mojs.Transit(o).then(thenO);
-    tr2.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    tr2.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.fill             = COLORS.YELLOW; 
     o.angle            = { '-220': '-10' };
     o.y                = { '60': '-50' };
     o.delay            = 150;
-    o.scaleX          = { 0 : 1.3 };
+    o.scaleX           = { 0 : 1.3 };
     let tr3 = new mojs.Transit(o).then(thenO);
-    tr3.wrapperEl.style[ 'mix-blend-mode' ] = blendMode;
+    tr3.el.style[ 'mix-blend-mode' ] = blendMode;
 
     return (new mojs.Timeline)
               .add( tr1, tr2, tr3 )

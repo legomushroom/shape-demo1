@@ -16,11 +16,15 @@ class Demo extends Module {
     @private
   */
   _render () {
-    const mainTimeline = ( new mojs.Timeline )
+    const mainTimeline = ( new mojs.Timeline({
+        speed: 1.72,
+        precision: 0.01
+      }))
       .add( new Triangles )
       .add( new GreenScene({ delay: 2700 }) )
       .add( new Circle({ delay: 4000 }) )
       .add( new Logo({ delay: 5900 }) );
+      // .play();
 
     ( new MojsPlayer({ add: mainTimeline }) )
       .el.style[ 'z-index' ] = 10;

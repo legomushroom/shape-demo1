@@ -19,11 +19,12 @@ class Logo extends Module {
         timeline  = new mojs.Timeline({
           delay:   this._props.delay,
           onStart: ( isFwd ) => {
-            this._toggleOpacity( pinkBg, isFwd );
+            // this._toggleOpacity( pinkBg, isFwd );
             mojs.h.setPrefixedStyle( logo, 'transform', 'none' );
           },
           onComplete: ( isFwd ) => {
             this._toggleOpacity( pinkBg, !isFwd );
+
             this._toggleOpacity( mChar,  !isFwd );
             this._toggleOpacity( oChar,  !isFwd );
             this._toggleOpacity( jChar,  !isFwd );
@@ -63,7 +64,7 @@ class Logo extends Module {
       shape:        [ 'circle', 'polygon', 'rect' ],
       radius:       7,
       fill:         'none',
-      stroke:       [ COLORS.HOTPINK, COLORS.CYAN, COLORS.YELLOW ],
+      stroke:       [ 'deeppink', COLORS.CYAN, COLORS.YELLOW ],
       strokeWidth:  { 5 : 0 },
       scale:        { .75 : 1 },
       delay:        'stagger(3000, 100)',
@@ -300,7 +301,10 @@ class Logo extends Module {
     let tween1 = new mojs.Tween({
       easing:     'linear.none',
       duration:   1000,
-      onStart: ( isFwd ) => { this._toggleOpacity( char, isFwd ); },
+      delay:      40,
+      onStart: ( isFwd ) => {
+        this._toggleOpacity( char, isFwd );
+      },
       onUpdate (p) {
         var shiftP = shiftEase( p );
         var scaleP = scaleEase( p );

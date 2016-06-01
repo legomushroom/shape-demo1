@@ -67,12 +67,14 @@ class Circle extends Module {
         duration:   700
       });
 
-    opts.fill       = COLORS.GREY;
-    opts.scale      = { 0 : scale };
-    opts.duration   = 1000;
-    opts.delay      = 2000;
-    opts.isShowEnd  = true;
+    opts.fill         = COLORS.GREY;
+    opts.scale        = { 0 : scale };
+    opts.duration     = 1000;
+    opts.delay        = 2000;
+    opts.isShowStart  = true;
+    opts.isShowEnd    = true;
     const circle3 = new mojs.Transit(opts);
+    circle3.isIt = true;
     this.circle3 = circle3;
 
     circle1._modules[0].el.style[ 'backface-visibility' ] = 'hidden';
@@ -161,7 +163,7 @@ class Circle extends Module {
   _calcScale ( radius ) {
     // since it is `radius` not `diameter` - / 2
     // since it is a circle - * 1.25 to fill the square screen
-    return 1.25 * (this._getWindowSize() / radius / 2);
+    return 1.4 * (this._getWindowSize() / radius / 2);
   }
 
 }

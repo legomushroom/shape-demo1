@@ -1,4 +1,4 @@
-# Transit - motion graphics demo 1
+# Shape - motion graphics demo 1
 
 Motion graphics use case demo 1 for [mojs](mojs.io) library.
 
