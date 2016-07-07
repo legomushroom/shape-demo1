@@ -40,12 +40,13 @@ class Circle extends Module {
           radius:     circleSize,
           fill:       COLORS.GREY,
           scale:      { 0.05 : 0.2 },
-          isShowEnd:  false,
           duration:   800,
-          easing:     'cubic.out'
+          easing:     'cubic.out',
+          isShowEnd:  false,
+          isForce3d:  true,
         };
 
-    const circle1 = new mojs.Transit(opts)
+    const circle1 = new mojs.Shape(opts)
       .then({
         easing:     'cubic.inout',
         scale:      .125,
@@ -56,33 +57,29 @@ class Circle extends Module {
         duration:   800
       });
 
-    opts.fill     = COLORS.PINK;
-    opts.scale    = { 0 : .1125 };
-    opts.duration = 700;
-    opts.delay    = 1000;
-    const circle2 = new mojs.Transit(opts)
-      .then({
-        easing:     'cubic.inout',
-        scale:      scale,
-        duration:   700
-      });
+    const circle2 = new mojs.Shape({
+      ...opts,
+      fill:       COLORS.PINK,
+      scale:      { 0 : .1125 },
+      duration:   700,
+      delay:      1000,
 
-    opts.fill         = COLORS.GREY;
-    opts.scale        = { 0 : scale };
-    opts.duration     = 1000;
-    opts.delay        = 2000;
-    opts.isShowStart  = true;
-    opts.isShowEnd    = true;
-    const circle3 = new mojs.Transit(opts);
-    circle3.isIt = true;
+    }).then({
+      easing:     'cubic.inout',
+      scale:      scale,
+      duration:   700
+    });
+
+    const circle3 = new mojs.Shape({
+      ...opts,
+      fill:         COLORS.GREY,
+      scale:        { 0: scale },
+      duration:     1000,
+      delay:        2000,
+      isShowStart:  true,
+      isShowEnd:    true
+    });
     this.circle3 = circle3;
-
-    circle1._modules[0].el.style[ 'backface-visibility' ] = 'hidden';
-    circle1._modules[1].el.style[ 'backface-visibility' ] = 'hidden';
-    circle1._modules[2].el.style[ 'backface-visibility' ] = 'hidden';
-    circle2._modules[0].el.style[ 'backface-visibility' ] = 'hidden';
-    circle2._modules[1].el.style[ 'backface-visibility' ] = 'hidden';
-    circle3.el.style[ 'backface-visibility' ] = 'hidden';
 
     let smallCircle = new mojs.Shape({
       parent,
@@ -109,9 +106,9 @@ class Circle extends Module {
     const lineOpts = {
       parent,
       shape:            'line',
-      left:             '50%', top: '50%',
       x:               -180,
       radius:           50,
+      radiusY:          0,
       stroke:           COLORS.GREY,
       strokeWidth:      {15 : 0},
       duration:         1000,
@@ -120,11 +117,13 @@ class Circle extends Module {
       strokeDashoffset: { '-100%': '100%' },
       easing:           'cubic.out',
     }
-    const line1 = new mojs.Transit(lineOpts);
+    const line1 = new mojs.Shape(lineOpts);
 
-    lineOpts.angle = 180;
-    lineOpts.x     = -lineOpts.x;
-    const line2 = new mojs.Transit(lineOpts);
+    const line2 = new mojs.Shape({
+      ...lineOpts,
+      angle:  180,
+      x:      -lineOpts.x
+    });
 
     return [ line1, line2 ];
   }
@@ -148,11 +147,13 @@ class Circle extends Module {
       delay:      850,
       easing:     'cubic.out'
     }
-    const triangle1 = new mojs.Transit( triangleOpts );
+    const triangle1 = new mojs.Shape( triangleOpts );
 
-    triangleOpts.y      = { '-80': 15 };
-    triangleOpts.angle  = 180;
-    const triangle2 = new mojs.Transit( triangleOpts );
+    const triangle2 = new mojs.Shape({
+      ...triangleOpts,
+      y:        { [-80] : 15 },
+      angle:    180
+    });
     return [ triangle1, triangle2 ]
   }
   /*

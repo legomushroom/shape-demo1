@@ -39,7 +39,7 @@ class Triangles extends Module {
         },
         thenO = { x: 0, y: 0, duration: 300, angle: -60, scaleX: 1 };
 
-    let tr1 = new mojs.Transit(o).then(thenO);
+    let tr1 = new mojs.Shape(o).then(thenO);
     tr1.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.fill             = COLORS.HOTPINK; 
@@ -47,7 +47,7 @@ class Triangles extends Module {
     o.y                = { '30': '-30' };
     o.delay            = 75;
     o.scaleX           = { 0 : 1.46 };
-    let tr2 = new mojs.Transit(o).then(thenO);
+    let tr2 = new mojs.Shape(o).then(thenO);
     tr2.el.style[ 'mix-blend-mode' ] = blendMode;
 
     o.fill             = COLORS.YELLOW; 
@@ -55,7 +55,7 @@ class Triangles extends Module {
     o.y                = { '60': '-50' };
     o.delay            = 150;
     o.scaleX           = { 0 : 1.3 };
-    let tr3 = new mojs.Transit(o).then(thenO);
+    let tr3 = new mojs.Shape(o).then(thenO);
     tr3.el.style[ 'mix-blend-mode' ] = blendMode;
 
     return (new mojs.Timeline)

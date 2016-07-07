@@ -28,7 +28,7 @@ class WhiteTriangles extends Module {
   */
   _static ( parent ) {
     // the static one
-    return new mojs.Transit({
+    return new mojs.Shape({
       parent,
       left:         '50%', top: '50%',
       shape:        'polygon',
@@ -63,12 +63,15 @@ class WhiteTriangles extends Module {
       delay:        100,
       isShowEnd:    false
     }
-    let shape3 = new mojs.Transit(opts);
+    let shape3 = new mojs.Shape(opts);
 
-    opts.strokeWidth = { 4 : 0 };
-    opts.duration = 1400;
-    opts.radius = { 85 : 95 };
-    let shape3_1 = new mojs.Transit(opts);
+    let shape3_1 = new mojs.Shape({
+      ...opts,
+      strokeWidth:  { 4 : 0 },
+      radius:       { 85 : 95 },
+      duration:     1400
+
+    });
 
     return [ this._smallTriangles( parent ), shape3, shape3_1 ];
   }
@@ -95,17 +98,23 @@ class WhiteTriangles extends Module {
           isShowEnd:    false
         };
 
-    opts.x = { 0: -shift1 };
-    opts.y = { 0: -shift2 };
-    let shape2_1 = new mojs.Transit(opts);
+    let shape2_1 = new mojs.Shape({
+      ...opts,
+      x: { 0: -shift1 },
+      y: { 0: -shift2 },
+    });
 
-    opts.x = { 0: shift1 };
-    opts.y = { 0: -shift2 };
-    let shape2_2 = new mojs.Transit(opts);
+    let shape2_2 = new mojs.Shape({
+      ...opts,
+      x: { 0 : shift1 },
+      y: { 0 : -shift2 }
+    });
 
-    opts.x = 0;
-    opts.y = { 0: 1.15*shift1 };
-    let shape2_3 = new mojs.Transit(opts);
+    let shape2_3 = new mojs.Shape({
+      ...opts,
+      x: 0,
+      y: { 0 : 1.15*shift1 }
+    });
 
     return [ shape2_1, shape2_2, shape2_3 ];
   }

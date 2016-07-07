@@ -1,5 +1,5 @@
 import Polyfill       from 'classlist-polyfill';
-import MojsPlayer     from 'mojs-player'
+// import MojsPlayer     from 'mojs-player'
 import Module         from './components/module';
 import TriangleLines  from './components/triangle-lines';
 import Triangles      from './components/triangles';
@@ -26,8 +26,10 @@ class Demo extends Module {
       .add( new Logo({ delay: 5900 }) );
       // .play();
 
-    ( new MojsPlayer({ add: mainTimeline }) )
-      .el.style[ 'z-index' ] = 10;
+    mojs.pool = mojs.pool || {};
+    mojs.pool.shapeDemo1 = mainTimeline;
+    // ( new MojsPlayer({ add: mainTimeline }) )
+      // .el.style[ 'z-index' ] = 10;
   }
 }
 
