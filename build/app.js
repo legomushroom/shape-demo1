@@ -124,8 +124,7 @@
 
 	    mojs.pool = mojs.pool || {};
 	    mojs.pool.shapeDemo1 = mainTimeline;
-	    // ( new MojsPlayer({ add: mainTimeline }) )
-	    // .el.style[ 'z-index' ] = 10;
+	    new MojsPlayer({ add: mainTimeline }).el.style['z-index'] = 10;
 	  };
 
 	  return Demo;

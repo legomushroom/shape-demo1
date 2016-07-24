@@ -29,7 +29,8 @@
   "homepage": "https://github.com/legomushroom/mojs-player",
   "dependencies": {
     "classlist-polyfill": "^1.0.2",
-    "mojs-player": "^0.40.0"
+    "mo-js": "^0.265.7",
+    "mojs-player": "^0.43.15"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.5",
